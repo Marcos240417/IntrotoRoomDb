@@ -30,21 +30,21 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
     }
 
     private fun subscribeDataStreams() {
-        searchQueryLiveData.observe(this){ query ->
-              lifecycleScope.launch {
-            adapter.submitList(dao?.getSearchedData(query)?.first())
-        }
-        }
+//        searchQueryLiveData.observe(this) { query ->
+//            lifecycleScope.launch {
+//                adapter.submitList(dao?.getSearchedData(query)?.first())
+//            }
+//        }
         lifecycleScope.launch {
             dao?.getAllDatta()?.collect { mList ->
                 adapter.submitList(mList)
-              //  binding.searchcView.setQuery("", false)
-              //  binding.searchcView.clearFocus()
-                lifecycleScope.launch {
-            adapter.submitList(dao?.getSearchedData(searchQueryLiveData.value ?: "")?.first())
-        }
+                //  binding.searchcView.setQuery("", false)
+                //  binding.searchcView.clearFocus()
             }
         }
+//        lifecycleScope.launch {
+//            adapter.submitList(dao?.getSearchedData(searchQueryLiveData.value ?: "")?.first())
+//        }
     }
 
     private fun initVars() {
@@ -75,9 +75,9 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
 
     private fun onQueryChanged(query: String) {
         searchQueryLiveData.postValue(query)
-      /*  lifecycleScope.launch {
-            adapter.submitList(dao?.getSearchedData(query)?.first())
-        }*/
+        /*  lifecycleScope.launch {
+              adapter.submitList(dao?.getSearchedData(query)?.first())
+          }*/
 
     }
 
