@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
     private var dao: PersonDao? = null
     private lateinit var adapter: PersonDetailsAdapter
 
+    private lateinit var personViewModel: PersonViewModel
+
     private lateinit var searchQueryLiveData: MutableLiveData<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,21 +32,20 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
     }
 
     private fun subscribeDataStreams() {
-//        searchQueryLiveData.observe(this) { query ->
-//            lifecycleScope.launch {
-//                adapter.submitList(dao?.getSearchedData(query)?.first())
-//            }
-//        }
-        lifecycleScope.launch {
-            dao?.getAllDatta()?.collect { mList ->
-                adapter.submitList(mList)
-                //  binding.searchcView.setQuery("", false)
-                //  binding.searchcView.clearFocus()
+        searchQueryLiveData.observe(this) { query ->
+            lifecycleScope.launch {
+                adapter.submitList(dao?.getSearchedData(query)?.first())
             }
         }
-//        lifecycleScope.launch {
-//            adapter.submitList(dao?.getSearchedData(searchQueryLiveData.value ?: "")?.first())
-//        }
+        lifecycleScope.launch {
+            dao?.getAllDatta()?.collect { mList ->
+                lifecycleScope.launch {
+                    adapter.submitList(
+                        dao?.getSearchedData(searchQueryLiveData.value ?: "")?.first()
+                    )
+                }
+            }
+        }
     }
 
     private fun initVars() {
@@ -92,7 +93,7 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
             if (isUpdate)
                 dao?.updatePerson(person)
             else
-                dao?.savePerson(person)
+                dao?.insertPerson(person)
         }
 
     }
@@ -103,6 +104,7 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
 
     override fun onDeletePersonClick(person: Person) {
         lifecycleScope.launch(Dispatchers.IO) {
+            // Passando apenas o ID da pessoa (person.pId), que é do tipo Int
             dao?.deletePersonById(person.pId)
         }
     }

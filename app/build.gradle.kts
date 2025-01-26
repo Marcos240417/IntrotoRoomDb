@@ -52,4 +52,28 @@ dependencies {
 
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    implementation(libs.io.insert.koin)
+
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    // LiveData
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    // Annotation processor
+    ksp(libs.androidx.lifecycle.compiler)
+
+    // Coroutines Core
+    implementation(libs.kotlinx.coroutines.core)
+    // Coroutines Android
+    implementation(libs.kotlinx.coroutines.android)
+
+    // Koin Core: contém o núcleo do Koin para injeção de dependências
+    implementation(libs.koin.core)
+    // Koin Android: suporte para Android e ViewModel
+    implementation(libs.io.insert.koin)
+
+
+
+
+
 }

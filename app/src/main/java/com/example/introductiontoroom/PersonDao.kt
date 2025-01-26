@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface PersonDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun savePerson(person: Person)
+    suspend fun insertPerson(person: Person)
 
     @Update
     suspend fun updatePerson(person: Person)
@@ -26,19 +26,20 @@ interface PersonDao {
     @Query("SELECT * FROM person_table")
     fun getAllDatta(): Flow<List<Person>>
 
-    //Procura pelo inicio da String
-    @Query("SELECT * FROM person_table WHERE person_name LIKE :query || '%'")
-    fun getSearchFromStartData(query: String): Flow<List<Person>>
-    
-    //Procura pelo final da String
-    @Query("SELECT * FROM person_table WHERE person_name LIKE '%' || :query")
-    fun getSearchFromEndData(query: String): Flow<List<Person>>
-    
     //Procura por ambos inicio e fim da String.
     @Query("SELECT * FROM person_table WHERE person_name LIKE '%' || :query || '%' or person_age LIKE '%' || :query || '%' or person_city LIKE '%' || :query || '%'")
     fun getSearchedData(query: String): Flow<List<Person>>
+
+    //Procura pelo inicio da String
+   // @Query("SELECT * FROM person_table WHERE person_name LIKE :query || '%'")
+   // fun getSearchFromStartData(query: String): Flow<List<Person>>
+    
+    //Procura pelo final da String
+  //  @Query("SELECT * FROM person_table WHERE person_name LIKE '%' || :query")
+    //fun getSearchFromEndData(query: String): Flow<List<Person>>
+
     
     //Procura tudo que não for a Stringo digitada
-    @Query("SELECT * FROM person_table WHERE person_name NOT LIKE '%' || :query")
-    fun getSearchedExceptQueryData(query: String): Flow<List<Person>>
+   // @Query("SELECT * FROM person_table WHERE person_name NOT LIKE '%' || :query")
+   // fun getSearchedExceptQueryData(query: String): Flow<List<Person>>
 }
