@@ -1,10 +1,11 @@
-package com.example.introductiontoroom
+package com.example.introductiontoroom.viewadapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.introductiontoroom.data.Person
 import com.example.introductiontoroom.databinding.SingleItemBinding
 
 class PersonDetailsAdapter(private val listener: PersonDetailsClickListener) :

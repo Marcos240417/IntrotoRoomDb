@@ -2,21 +2,23 @@ package com.example.introductiontoroom
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.introductiontoroom.AddEditPersonFragment
+import com.example.introductiontoroom.data.Person
 import com.example.introductiontoroom.databinding.ActivityMainBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import com.example.introductiontoroom.viewadapter.PersonDetailsAdapter
+import com.example.introductiontoroom.viewadapter.PersonRepository
+import com.example.introductiontoroom.viewadapter.PersonViewModel
+import com.example.introductiontoroom.viewadapter.PersonViewModelFactory
 
 class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonListener,
     PersonDetailsAdapter.PersonDetailsClickListener {
-    private lateinit var binding: ActivityMainBinding
-    private var dao: PersonDao? = null
-    private lateinit var adapter: PersonDetailsAdapter
 
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: PersonDetailsAdapter
     private lateinit var personViewModel: PersonViewModel
 
     private lateinit var searchQueryLiveData: MutableLiveData<String>
@@ -31,29 +33,14 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
         subscribeDataStreams()
     }
 
-    private fun subscribeDataStreams() {
-        searchQueryLiveData.observe(this) { query ->
-            lifecycleScope.launch {
-                adapter.submitList(dao?.getSearchedData(query)?.first())
-            }
-        }
-        lifecycleScope.launch {
-            dao?.getAllDatta()?.collect { mList ->
-                lifecycleScope.launch {
-                    adapter.submitList(
-                        dao?.getSearchedData(searchQueryLiveData.value ?: "")?.first()
-                    )
-                }
-            }
-        }
-    }
-
     private fun initVars() {
-        dao = AppDatabase.getDatabase(this).personDao()
+        personViewModel = PersonViewModelFactory(PersonRepository(applicationContext)).create(PersonViewModel::class.java)
+
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = PersonDetailsAdapter(this)
         binding.recyclerView.adapter = adapter
+
         searchQueryLiveData = MutableLiveData("")
     }
 
@@ -61,25 +48,20 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
         binding.floatingActionButton.setOnClickListener {
             showBottomSheet()
         }
-        binding.searchcView.setOnQueryTextListener(object : OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?) = false
 
+        binding.searchcView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null)
                     onQueryChanged(newText)
                 return true
             }
-
-
         })
     }
 
     private fun onQueryChanged(query: String) {
         searchQueryLiveData.postValue(query)
-        /*  lifecycleScope.launch {
-              adapter.submitList(dao?.getSearchedData(query)?.first())
-          }*/
-
+        personViewModel.getSearchedData(query)
     }
 
     private fun showBottomSheet(person: Person? = null) {
@@ -88,14 +70,11 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
     }
 
     override fun onSavedBtnClicked(isUpdate: Boolean, person: Person) {
-        lifecycleScope.launch(Dispatchers.IO) {
-
-            if (isUpdate)
-                dao?.updatePerson(person)
-            else
-                dao?.insertPerson(person)
+        if (isUpdate) {
+            personViewModel.updatePerson(person)
+        } else {
+            personViewModel.addPerson(person)
         }
-
     }
 
     override fun onEditPersonClick(person: Person) {
@@ -103,9 +82,21 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
     }
 
     override fun onDeletePersonClick(person: Person) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            // Passando apenas o ID da pessoa (person.pId), que é do tipo Int
-            dao?.deletePersonById(person.pId)
-        }
+        personViewModel.deletePerson(person)
+        personViewModel.deletePersonById(person)
+    }
+
+    private fun subscribeDataStreams() {
+        personViewModel.allPersons.observe(this, Observer { personList ->
+            adapter.submitList(personList)
+        })
+
+        searchQueryLiveData.observe(this, Observer { query ->
+            personViewModel.getSearchedData(query)
+            personViewModel.searchedPersons.observe(this, Observer { personList ->
+                adapter.submitList(personList)
+            })
+        })
     }
 }
+

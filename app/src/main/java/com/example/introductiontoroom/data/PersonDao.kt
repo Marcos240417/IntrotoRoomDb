@@ -1,4 +1,4 @@
-package com.example.introductiontoroom
+package com.example.introductiontoroom.data
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -18,7 +18,7 @@ interface PersonDao {
     suspend fun updatePerson(person: Person)
 
     @Delete
-    suspend fun deletePerson(person: Person )
+    suspend fun deletePerson(person: Person)
 
     @Query("DELETE FROM person_table WHERE pId = :pId")
     suspend fun deletePersonById(pId: Int)

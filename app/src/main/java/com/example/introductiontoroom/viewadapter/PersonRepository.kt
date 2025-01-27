@@ -1,6 +1,9 @@
-package com.example.introductiontoroom
+package com.example.introductiontoroom.viewadapter
 
 import android.content.Context
+import com.example.introductiontoroom.data.AppDatabase
+import com.example.introductiontoroom.data.Person
+import kotlinx.coroutines.flow.Flow
 
 class PersonRepository(private val context: Context) {
 
@@ -11,6 +14,6 @@ class PersonRepository(private val context: Context) {
     suspend fun updatePerson(person: Person) = db.personDao().updatePerson(person)
     suspend fun deletePersonById(person: Person) = db.personDao().deletePersonById(person.pId) // Corrigido aqui
 
-    fun getAllPerson() = db.personDao().getAllDatta()
-    fun getSearchedData(query: String?) = db.personDao().getSearchedData(query.toString())
+    fun getAllPerson(): Flow<List<Person>> = db.personDao().getAllDatta()
+    fun getSearchedData(query: String): Flow<List<Person>> = db.personDao().getSearchedData(query)
 }
