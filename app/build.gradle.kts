@@ -72,8 +72,4 @@ dependencies {
     // Koin Android: suporte para Android e ViewModel
     implementation(libs.io.insert.koin)
 
-
-
-
-
 }

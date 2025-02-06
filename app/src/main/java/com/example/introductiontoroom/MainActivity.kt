@@ -6,20 +6,19 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.introductiontoroom.AddEditPersonFragment
 import com.example.introductiontoroom.data.Person
 import com.example.introductiontoroom.databinding.ActivityMainBinding
 import com.example.introductiontoroom.viewadapter.PersonDetailsAdapter
-import com.example.introductiontoroom.viewadapter.PersonRepository
 import com.example.introductiontoroom.viewadapter.PersonViewModel
-import com.example.introductiontoroom.viewadapter.PersonViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonListener,
     PersonDetailsAdapter.PersonDetailsClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: PersonDetailsAdapter
-    private lateinit var personViewModel: PersonViewModel
+    private val personViewModel: PersonViewModel by viewModel() //  Koin injeta automaticamente
+
 
     private lateinit var searchQueryLiveData: MutableLiveData<String>
 
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
     }
 
     private fun initVars() {
-        personViewModel = PersonViewModelFactory(PersonRepository(applicationContext)).create(PersonViewModel::class.java)
+        //personViewModel = PersonViewModelFactory(PersonRepository(applicationContext)).create(PersonViewModel::class.java)
 
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)

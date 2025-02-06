@@ -16,4 +16,8 @@ val appModule = module {
 
     // ViewModel
     viewModelOf(::PersonViewModel) // Cria o ViewModel com a referência direta ao construtor
+
+    /*single { PersonRepository(get()) } // Injetando o PersonRepository (assumindo que ele precisa do contexto ou de algum outro parâmetro)
+    viewModel { PersonViewModel(get()) } // Injetando o PersonViewModel com a dependência do PersonRepository
+*/
 }
