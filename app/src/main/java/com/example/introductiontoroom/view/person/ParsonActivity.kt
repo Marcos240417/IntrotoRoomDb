@@ -3,7 +3,6 @@ package com.example.introductiontoroom.view.person
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.introductiontoroom.data.model.PersonEntity
@@ -18,9 +17,6 @@ class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonL
     private lateinit var adapter: PersonDetailsAdapter
     private val personViewModel: PersonViewModel by viewModel() //  Koin injeta automaticamente
 
-
-    private lateinit var searchQueryLiveData: MutableLiveData<String>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -32,14 +28,10 @@ class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonL
     }
 
     private fun initVars() {
-        //personViewModel = PersonViewModelFactory(PersonRepository(applicationContext)).create(PersonViewModel::class.java)
-
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = PersonDetailsAdapter(this)
         binding.recyclerView.adapter = adapter
-
-        searchQueryLiveData = MutableLiveData("")
     }
 
     private fun attachUiListener() {
@@ -58,7 +50,6 @@ class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonL
     }
 
     private fun onQueryChanged(query: String) {
-        searchQueryLiveData.postValue(query)
         personViewModel.getSearchedData(query)
     }
 
@@ -89,11 +80,8 @@ class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonL
             adapter.submitList(personList)
         })
 
-        searchQueryLiveData.observe(this, Observer { query ->
-            personViewModel.getSearchedData(query)
-            personViewModel.searchedPersons.observe(this, Observer { personList ->
-                adapter.submitList(personList)
-            })
+        personViewModel.searchedPersons.observe(this, Observer { personList ->
+            adapter.submitList(personList)
         })
     }
 }
