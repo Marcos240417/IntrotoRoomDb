@@ -1,14 +1,15 @@
-package com.example.introductiontoroom.data
+package com.example.introductiontoroom.di
 
-import com.example.introductiontoroom.viewadapter.PersonRepository
-import com.example.introductiontoroom.viewadapter.PersonViewModel
+import com.example.introductiontoroom.data.AppDatabase
+import com.example.introductiontoroom.data.PersonRepository
+import com.example.introductiontoroom.viewmodel.PersonViewModel
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val appModule = module {
     // Banco de Dados
-    single { AppDatabase.getDatabase(get()) } // Passa o contexto para criar o banco
+    single { AppDatabase.Companion.getDatabase(get()) } // Passa o contexto para criar o banco
     single { get<AppDatabase>().personDao() } // Instância do DAO
 
     // Repositório

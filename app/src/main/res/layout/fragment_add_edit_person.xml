@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:background="@color/background_color"
-    tools:context=".view.AddEditPersonFragment">
+    tools:context=".view.person.AddEditPersonFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/personNameInputLayout"

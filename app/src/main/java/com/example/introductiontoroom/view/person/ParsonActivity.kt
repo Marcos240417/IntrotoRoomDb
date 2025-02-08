@@ -1,4 +1,4 @@
-package com.example.introductiontoroom.view
+package com.example.introductiontoroom.view.person
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,12 +6,12 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.introductiontoroom.data.Person
+import com.example.introductiontoroom.data.model.PersonEntity
 import com.example.introductiontoroom.databinding.ActivityMainBinding
-import com.example.introductiontoroom.viewadapter.PersonViewModel
+import com.example.introductiontoroom.viewmodel.PersonViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonListener,
+class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonListener,
     PersonDetailsAdapter.PersonDetailsClickListener {
 
     private lateinit var binding: ActivityMainBinding
@@ -62,26 +62,26 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
         personViewModel.getSearchedData(query)
     }
 
-    private fun showBottomSheet(person: Person? = null) {
-        val bottomSheet = AddEditPersonFragment(this, person)
+    private fun showBottomSheet(personEntity: PersonEntity? = null) {
+        val bottomSheet = AddEditPersonFragment(this, personEntity)
         bottomSheet.show(supportFragmentManager, AddEditPersonFragment.Companion.TAG)
     }
 
-    override fun onSavedBtnClicked(isUpdate: Boolean, person: Person) {
+    override fun onSavedBtnClicked(isUpdate: Boolean, personEntity: PersonEntity) {
         if (isUpdate) {
-            personViewModel.updatePerson(person)
+            personViewModel.updatePerson(personEntity)
         } else {
-            personViewModel.addPerson(person)
+            personViewModel.addPerson(personEntity)
         }
     }
 
-    override fun onEditPersonClick(person: Person) {
-        showBottomSheet(person)
+    override fun onEditPersonClick(personEntity: PersonEntity) {
+        showBottomSheet(personEntity)
     }
 
-    override fun onDeletePersonClick(person: Person) {
-        personViewModel.deletePerson(person)
-        personViewModel.deletePersonById(person)
+    override fun onDeletePersonClick(personEntity: PersonEntity) {
+        personViewModel.deletePerson(personEntity)
+        personViewModel.deletePersonById(personEntity)
     }
 
     private fun subscribeDataStreams() {

@@ -1,15 +1,15 @@
-package com.example.introductiontoroom.view
+package com.example.introductiontoroom.view.person
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.introductiontoroom.data.Person
+import com.example.introductiontoroom.data.model.PersonEntity
 import com.example.introductiontoroom.databinding.SingleItemBinding
 
 class PersonDetailsAdapter(private val listener: PersonDetailsClickListener) :
-    ListAdapter<Person, PersonDetailsAdapter.PersonDetailsViewHolder>(DiffUtilCallback()) {
+    ListAdapter<PersonEntity, PersonDetailsAdapter.PersonDetailsViewHolder>(DiffUtilCallback()) {
 
     inner class PersonDetailsViewHolder(private val binding: SingleItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -23,17 +23,17 @@ class PersonDetailsAdapter(private val listener: PersonDetailsClickListener) :
             }
         }
 
-        fun bindi(person: Person) {
-            binding.personNameTv.text = person.name
-            binding.personAgeTv.text = person.age.toString()
-            binding.personCityTv.text = person.city
+        fun bindi(personEntity: PersonEntity) {
+            binding.personNameTv.text = personEntity.name
+            binding.personAgeTv.text = personEntity.age.toString()
+            binding.personCityTv.text = personEntity.city
         }
     }
 
-    class DiffUtilCallback : DiffUtil.ItemCallback<Person>() {
-        override fun areItemsTheSame(oldItem: Person, newItem: Person) = oldItem.pId == newItem.pId
+    class DiffUtilCallback : DiffUtil.ItemCallback<PersonEntity>() {
+        override fun areItemsTheSame(oldItem: PersonEntity, newItem: PersonEntity) = oldItem.pId == newItem.pId
 
-        override fun areContentsTheSame(oldItem: Person, newItem: Person) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: PersonEntity, newItem: PersonEntity) = oldItem == newItem
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonDetailsViewHolder {
@@ -51,7 +51,7 @@ class PersonDetailsAdapter(private val listener: PersonDetailsClickListener) :
     }
 
     interface PersonDetailsClickListener{
-        fun onEditPersonClick(person: Person)
-        fun onDeletePersonClick(person: Person)
+        fun onEditPersonClick(personEntity: PersonEntity)
+        fun onDeletePersonClick(personEntity: PersonEntity)
     }
 }

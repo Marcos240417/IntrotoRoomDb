@@ -1,14 +1,14 @@
-package com.example.introductiontoroom.view
+package com.example.introductiontoroom.view.person
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.introductiontoroom.data.Person
+import com.example.introductiontoroom.data.model.PersonEntity
 import com.example.introductiontoroom.databinding.FragmentAddEditPersonBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class AddEditPersonFragment(private val listener: AddEditPersonListener, private val person: Person?) :
+class AddEditPersonFragment(private val listener: AddEditPersonListener, private val personEntity: PersonEntity?) :
     BottomSheetDialogFragment() {
     private lateinit var binding: FragmentAddEditPersonBinding
 
@@ -24,17 +24,17 @@ class AddEditPersonFragment(private val listener: AddEditPersonListener, private
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (person != null){
-            setExistingDataOnUi(person)
+        if (personEntity != null){
+            setExistingDataOnUi(personEntity)
         }
 
         attachUiListener()
     }
 
-    private fun setExistingDataOnUi(person: Person){
-        binding.personNameEt.setText(person.name)
-        binding.personAgeEt.setText(person.age.toString())
-        binding.personCityEt.setText(person.city)
+    private fun setExistingDataOnUi(personEntity: PersonEntity){
+        binding.personNameEt.setText(personEntity.name)
+        binding.personAgeEt.setText(personEntity.age.toString())
+        binding.personCityEt.setText(personEntity.city)
         binding.saveBtn.text = "Update"
 
     }
@@ -45,8 +45,8 @@ class AddEditPersonFragment(private val listener: AddEditPersonListener, private
             val age = binding.personAgeEt.text.toString()
             val city = binding.personCityEt.text.toString()
             if (name.isNotEmpty() && age.isNotEmpty() && city.isNotEmpty()) {
-                val person1 = Person(person?.pId?: 0, name, age.toInt(), city)
-                listener.onSavedBtnClicked(person != null, person1)
+                val personEntity1 = PersonEntity(personEntity?.pId?: 0, name, age.toInt(), city)
+                listener.onSavedBtnClicked(personEntity != null, personEntity1)
             }
             dismiss()
         }
@@ -57,7 +57,7 @@ class AddEditPersonFragment(private val listener: AddEditPersonListener, private
     }
 
     interface AddEditPersonListener {
-        fun onSavedBtnClicked(isUpdate: Boolean, person: Person)
+        fun onSavedBtnClicked(isUpdate: Boolean, personEntity: PersonEntity)
     }
 }
 
