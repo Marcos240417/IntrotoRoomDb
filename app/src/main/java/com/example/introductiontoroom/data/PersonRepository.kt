@@ -10,5 +10,4 @@ interface PersonRepository {
     suspend fun deletePersonById(personEntity: PersonEntity)
     fun getAllPerson(): Flow<List<PersonEntity>>
     fun getSearchedData(query: String): Flow<List<PersonEntity>>
-
 }
