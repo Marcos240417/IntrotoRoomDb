@@ -1,4 +1,4 @@
-package com.example.introductiontoroom
+package com.example.introductiontoroom.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.introductiontoroom.data.Person
 import com.example.introductiontoroom.databinding.ActivityMainBinding
-import com.example.introductiontoroom.viewadapter.PersonDetailsAdapter
 import com.example.introductiontoroom.viewadapter.PersonViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -65,7 +64,7 @@ class MainActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonLis
 
     private fun showBottomSheet(person: Person? = null) {
         val bottomSheet = AddEditPersonFragment(this, person)
-        bottomSheet.show(supportFragmentManager, AddEditPersonFragment.TAG)
+        bottomSheet.show(supportFragmentManager, AddEditPersonFragment.Companion.TAG)
     }
 
     override fun onSavedBtnClicked(isUpdate: Boolean, person: Person) {

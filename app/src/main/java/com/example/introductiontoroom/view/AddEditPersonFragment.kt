@@ -1,4 +1,4 @@
-package com.example.introductiontoroom
+package com.example.introductiontoroom.view
 
 import android.os.Bundle
 import android.view.LayoutInflater

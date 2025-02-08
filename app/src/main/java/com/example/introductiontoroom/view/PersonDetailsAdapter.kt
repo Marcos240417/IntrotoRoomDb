@@ -1,4 +1,4 @@
-package com.example.introductiontoroom.viewadapter
+package com.example.introductiontoroom.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

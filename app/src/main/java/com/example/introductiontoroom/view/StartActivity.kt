@@ -1,4 +1,4 @@
-package com.example.introductiontoroom
+package com.example.introductiontoroom.view
 
 import android.content.Intent
 import android.os.Bundle
