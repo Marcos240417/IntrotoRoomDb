@@ -1,7 +1,7 @@
 package com.example.introductiontoroom.di
 
 import com.example.introductiontoroom.data.AppDatabase
-import com.example.introductiontoroom.data.PersonRepository
+import com.example.introductiontoroom.data.PersonRepositoryImpl
 import com.example.introductiontoroom.viewmodel.PersonViewModel
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -13,7 +13,7 @@ val appModule = module {
     single { get<AppDatabase>().personDao() } // Instância do DAO
 
     // Repositório
-    singleOf(::PersonRepository) // Cria o repositório com a referência direta ao construtor
+    singleOf(::PersonRepositoryImpl) // Cria o repositório com a referência direta ao construtor
 
     // ViewModel
     viewModelOf(::PersonViewModel) // Cria o ViewModel com a referência direta ao construtor
