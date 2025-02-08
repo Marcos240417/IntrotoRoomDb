@@ -17,6 +17,16 @@ class PersonViewModel(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
+    /*
+    Na ViewModel, você está utilizando o LiveData de duas maneiras diferentes para exibir listas
+    do mesmo tipo.
+
+    Atividade:
+
+    Reduza a quantidade de código e utilize o LiveData apenas uma vez, atendendo à funcionalidade
+    de busca com e sem query de pesquisa.
+     */
+
     // Convertendo Flow para LiveData
     val allPersons: LiveData<List<PersonEntity>> = personRepository.getAllPerson().asLiveData()
     private val _searchedPersons = MutableLiveData<List<PersonEntity>>()
