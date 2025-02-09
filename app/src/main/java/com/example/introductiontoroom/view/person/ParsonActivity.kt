@@ -1,6 +1,8 @@
 package com.example.introductiontoroom.view.person
 
 import android.os.Bundle
+import android.view.WindowManager
+import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -25,7 +27,11 @@ class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonL
         initVars()
         attachUiListener()
         subscribeDataStreams()
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
+
     }
+
 
     private fun initVars() {
         binding.recyclerView.setHasFixedSize(true)
