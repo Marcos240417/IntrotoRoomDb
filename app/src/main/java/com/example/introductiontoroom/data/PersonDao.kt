@@ -30,17 +30,4 @@ interface PersonDao {
     //Procura por ambos inicio e fim da String.
     @Query("SELECT * FROM person_table WHERE person_name LIKE '%' || :query || '%' or person_age LIKE '%' || :query || '%' or person_city LIKE '%' || :query || '%'")
     fun getSearchedData(query: String): Flow<List<PersonEntity>>
-
-    //Procura pelo inicio da String
-   // @Query("SELECT * FROM person_table WHERE person_name LIKE :query || '%'")
-   // fun getSearchFromStartData(query: String): Flow<List<Person>>
-    
-    //Procura pelo final da String
-  //  @Query("SELECT * FROM person_table WHERE person_name LIKE '%' || :query")
-    //fun getSearchFromEndData(query: String): Flow<List<Person>>
-
-    
-    //Procura tudo que não for a Stringo digitada
-   // @Query("SELECT * FROM person_table WHERE person_name NOT LIKE '%' || :query")
-   // fun getSearchedExceptQueryData(query: String): Flow<List<Person>>
 }
