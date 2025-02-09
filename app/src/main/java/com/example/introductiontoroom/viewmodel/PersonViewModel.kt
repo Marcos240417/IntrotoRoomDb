@@ -3,7 +3,6 @@ package com.example.introductiontoroom.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.introductiontoroom.data.PersonRepository
 import com.example.introductiontoroom.data.model.PersonEntity
@@ -28,9 +27,23 @@ class PersonViewModel(
      */
 
     // Convertendo Flow para LiveData
-    val allPersons: LiveData<List<PersonEntity>> = personRepository.getAllPerson().asLiveData()
+    //val allPersons: LiveData<List<PersonEntity>> = personRepository.getAllPerson().asLiveData()
     private val _searchedPersons = MutableLiveData<List<PersonEntity>>()
     val searchedPersons: LiveData<List<PersonEntity>> get() = _searchedPersons
+
+    init {
+        // Inicializa com a lista completa de pessoas
+        getAllPersons()
+    }
+
+    // Função para obter todas as pessoas
+    private fun getAllPersons() {
+        viewModelScope.launch(dispatcher) {
+            personRepository.getAllPerson().collect { personList ->
+                _searchedPersons.postValue(personList)
+            }
+        }
+    }
 
     // Função para adicionar uma pessoa
     fun addPerson(personEntity: PersonEntity) {
@@ -61,7 +74,7 @@ class PersonViewModel(
     }
 
     // Função para procurar uma pessoa com base no nome, idade ou cidade
-    fun getSearchedData(query: String) {
+    fun getSearchedData(query: String = "") {
         viewModelScope.launch(dispatcher) {
             val result: Flow<List<PersonEntity>> = personRepository.getSearchedData(query)
             result.collect { personList ->
