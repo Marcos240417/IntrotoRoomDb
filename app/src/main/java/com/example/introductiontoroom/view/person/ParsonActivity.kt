@@ -76,9 +76,9 @@ class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonL
     }
 
     private fun subscribeDataStreams() {
-        personViewModel.allPersons.observe(this, Observer { personList ->
+        /*personViewModel.allPersons.observe(this, Observer { personList ->
             adapter.submitList(personList)
-        })
+        })*/
 
         personViewModel.searchedPersons.observe(this, Observer { personList ->
             adapter.submitList(personList)
