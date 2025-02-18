@@ -2,7 +2,6 @@ package com.example.introductiontoroom.view.person
 
 import android.os.Bundle
 import android.view.WindowManager
-import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -13,7 +12,7 @@ import com.example.introductiontoroom.viewmodel.PersonViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonListener,
-    PersonDetailsAdapter.PersonDetailsClickListener {
+    PersonDetailsClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: PersonDetailsAdapter
@@ -28,10 +27,7 @@ class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonL
         attachUiListener()
         subscribeDataStreams()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-
-
     }
-
 
     private fun initVars() {
         binding.recyclerView.setHasFixedSize(true)
@@ -82,10 +78,6 @@ class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonL
     }
 
     private fun subscribeDataStreams() {
-        /*personViewModel.allPersons.observe(this, Observer { personList ->
-            adapter.submitList(personList)
-        })*/
-
         personViewModel.searchedPersons.observe(this, Observer { personList ->
             adapter.submitList(personList)
         })
