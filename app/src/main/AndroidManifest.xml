@@ -25,7 +25,9 @@
         </activity>
         <activity
             android:name=".view.person.ParsonActivity"
-            android:exported="false"/>
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
 
 
     </application>
