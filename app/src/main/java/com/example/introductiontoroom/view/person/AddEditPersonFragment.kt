@@ -39,7 +39,7 @@ class AddEditPersonFragment(
 
     private fun setExistingDataOnUi(personEntity: PersonEntity) {
         binding.personNameEt.setText(personEntity.name)
-        binding.personDateBirth.setText(personEntity.dateBirth)
+        binding.personDateBirth.setText(personEntity.dateBirth).toString()
         binding.personSusEt.setText(personEntity.city)
         binding.saveBtn.text = "Update"
     }
@@ -53,10 +53,10 @@ class AddEditPersonFragment(
 
             if (name.isNotEmpty() && dateBirth.isNotEmpty() && city.isNotEmpty()) {
                 val updatedPerson = PersonEntity(
-                    id,
-                    name,
-                    dateBirth,
-                    city
+                    pId = id,
+                    name = name,
+                    dateBirth = dateBirth,
+                    city = city
                 )
                 listener.onSavedBtnClicked(personEntity != null, updatedPerson)
             } else {

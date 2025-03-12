@@ -28,7 +28,7 @@ interface PersonDao {
     fun getAllDatta(): Flow<List<PersonEntity>>
 
     //Procura por ambos inicio e fim da String.
-    @Query("SELECT * FROM person_table WHERE person_name LIKE '%' || :query || '%' or person_age LIKE '%' || :query || '%' or person_city LIKE '%' || :query || '%'")
+    @Query("SELECT * FROM person_table WHERE person_name LIKE '%' || :query || '%' or person_date_birth LIKE '%' || :query || '%' or person_city LIKE '%' || :query || '%'")
     fun getSearchedData(query: String): Flow<List<PersonEntity>>
 
 }

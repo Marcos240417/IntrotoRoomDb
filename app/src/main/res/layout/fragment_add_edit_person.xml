@@ -86,7 +86,7 @@
             android:digits="0123456789"
             android:importantForAutofill="yes"
             android:textColor="@color/white"
-            android:inputType="number"
+            android:inputType="textMultiLine"
             android:hint="@string/id_SUS" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.button.MaterialButton
