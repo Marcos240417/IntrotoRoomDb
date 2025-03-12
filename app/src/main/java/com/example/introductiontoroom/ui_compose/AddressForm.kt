@@ -143,8 +143,8 @@ fun AddressForm(
                     Text(text = "Bairro")
                 }
             )
-            var cidade by remember(uiState.cidade) {
-                mutableStateOf(uiState.cidade)
+            var cidade by remember(uiState.localidade) {
+                mutableStateOf(uiState.localidade)
             }
             TextField(
                 value = cidade,

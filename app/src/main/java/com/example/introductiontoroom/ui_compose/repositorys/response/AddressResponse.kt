@@ -15,7 +15,7 @@ class AddressResponse(
 
     @SerialName("localidade")
     @field:Json(name = "localidade")
-    val cidade: String = "",
+    val localidade: String = "",
 
     @SerialName("uf")
     @field:Json(name = "uf")
@@ -25,7 +25,7 @@ class AddressResponse(
     fun toAddressFormUiState() = AddressFormUiState(
         logradouro = logradouro,
         bairro = bairro,
-        cidade = cidade,
+        localidade = localidade,
         estado = estado,
         isLoading = false,
         isError = false
