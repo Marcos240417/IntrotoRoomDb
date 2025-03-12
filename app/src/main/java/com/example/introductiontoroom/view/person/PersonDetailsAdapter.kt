@@ -50,7 +50,7 @@ class PersonDetailsAdapter(private val listener: PersonDetailsClickListener) :
         fun bind(personEntity: PersonEntity) {
             binding.personNameTv.text = personEntity.name
             binding.personAgeTv.text = personEntity.dateBirth.toString()
-            binding.personCityTv.text = personEntity.city.toString()
+            binding.personCityTv.text = personEntity.nsus.toString()
         }
     }
 

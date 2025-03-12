@@ -28,6 +28,7 @@ ui = "1.7.8"
 uiTooling = "1.7.8"
 composeBom = "2025.02.00"
 firebaseCrashlyticsBuildtools = "3.0.3"
+baselibrary = "3.2.0-alpha11"
 
 [libraries]
 adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
@@ -73,6 +74,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+androidx-baselibrary = { group = "androidx.databinding", name = "baseLibrary", version.ref = "baselibrary" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

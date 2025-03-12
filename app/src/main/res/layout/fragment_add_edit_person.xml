@@ -55,6 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
+            android:maxLength="10"
             android:textColor="@color/white"
             android:inputType="date"
             android:hint="@string/date_of_birth" />
@@ -82,11 +83,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:maxLength="15"
-            android:digits="0123456789"
-            android:importantForAutofill="yes"
+            android:maxLength="18"
             android:textColor="@color/white"
-            android:inputType="textMultiLine"
+            android:inputType="date|number"
             android:hint="@string/id_SUS" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.button.MaterialButton

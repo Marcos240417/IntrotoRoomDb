@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.introductiontoroom.data.model.PersonEntity
 import com.example.introductiontoroom.databinding.FragmentAddEditPersonBinding
-import com.example.introductiontoroom.persontransformations.DateMask
+import com.example.introductiontoroom.persontransformations_fragment.ApplySusCardMask
+import com.example.introductiontoroom.persontransformations_fragment.DateMask
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class AddEditPersonFragment(
@@ -30,18 +31,23 @@ class AddEditPersonFragment(
         // Aplica a máscara ao campo de data de nascimento
         binding.personDateBirth.addTextChangedListener(DateMask())
 
-        if (personEntity != null) {
-            setExistingDataOnUi(personEntity)
+        // Aplica a máscara ao campo de Nº do SUS
+        binding.personSusEt.addTextChangedListener(ApplySusCardMask())
+
+        // Se personEntity não for nulo, preenche os campos com os dados existentes
+        personEntity?.let {
+            setExistingDataOnUi(it)
         }
 
         attachUiListener()
     }
 
     private fun setExistingDataOnUi(personEntity: PersonEntity) {
+        // Preenche os campos com os dados da pessoa
         binding.personNameEt.setText(personEntity.name)
-        binding.personDateBirth.setText(personEntity.dateBirth).toString()
-        binding.personSusEt.setText(personEntity.city)
-        binding.saveBtn.text = "Update"
+        binding.personDateBirth.setText(personEntity.dateBirth) // Corrigido, sem o toString()
+        binding.personSusEt.setText(personEntity.nsus) // Suponho que city seja o número do SUS
+        binding.saveBtn.text = "Update" // Altera o texto do botão para "Update"
     }
 
     private fun attachUiListener() {
@@ -56,7 +62,7 @@ class AddEditPersonFragment(
                     pId = id,
                     name = name,
                     dateBirth = dateBirth,
-                    city = city
+                    nsus = city
                 )
                 listener.onSavedBtnClicked(personEntity != null, updatedPerson)
             } else {

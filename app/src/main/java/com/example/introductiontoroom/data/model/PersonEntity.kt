@@ -9,7 +9,7 @@ data class PersonEntity(
     @PrimaryKey(autoGenerate = true) val pId: Int,
     @ColumnInfo("person_name") val name: String,
     @ColumnInfo("person_date_birth") val dateBirth:String,
-    @ColumnInfo("person_city") val city: String
+    @ColumnInfo("person_nsus") val nsus: String
 )
 
 

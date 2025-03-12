@@ -16,7 +16,7 @@
         android:background="@drawable/rounded_shape"
         android:clipToOutline="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/oip"
+        android:src="@drawable/capa_start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -33,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/kurama" />
+        app:srcCompat="@drawable/button_start" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
