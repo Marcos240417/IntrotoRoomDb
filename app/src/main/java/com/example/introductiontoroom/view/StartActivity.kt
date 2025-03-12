@@ -6,7 +6,7 @@ import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.introductiontoroom.databinding.ActivityStartBinding
-import com.example.introductiontoroom.view.person.ParsonActivity
+import com.example.introductiontoroom.view.person.PersonActivity
 
 class StartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartBinding
@@ -17,7 +17,7 @@ class StartActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.roundedImageView.setOnClickListener {
-            startActivity(Intent(this, ParsonActivity::class.java))
+            startActivity(Intent(this, PersonActivity::class.java))
         }
 
         window.setFlags(

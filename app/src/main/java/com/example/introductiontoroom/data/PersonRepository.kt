@@ -10,4 +10,13 @@ interface PersonRepository {
     suspend fun deletePersonById(personEntity: PersonEntity)
     fun getAllPerson(): Flow<List<PersonEntity>>
     fun getSearchedData(query: String): Flow<List<PersonEntity>>
+
+    // Adicionar integração com Retrofit
+    suspend fun fetchPeopleFromApi(): Flow<List<PersonEntity>>
+    suspend fun searchPeopleFromApi(query: String): Flow<List<PersonEntity>>
+   // suspend fun insertPeopleFromApi(insertPerson: String): Flow<List<PersonEntity>>
+
+    // Alterar a assinatura da função para retornar Flow<Unit>
+    suspend fun insertPeopleFromApi(insertPerson: String): Flow<Unit>
+
 }

@@ -8,7 +8,6 @@ import com.example.introductiontoroom.data.PersonRepository
 import com.example.introductiontoroom.data.model.PersonEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class PersonViewModel(
@@ -16,27 +15,15 @@ class PersonViewModel(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    /*
-    Na ViewModel, você está utilizando o LiveData de duas maneiras diferentes para exibir listas
-    do mesmo tipo.
-
-    Atividade:
-
-    Reduza a quantidade de código e utilize o LiveData apenas uma vez, atendendo à funcionalidade
-    de busca com e sem query de pesquisa.
-     */
-
-    // Convertendo Flow para LiveData
-    //val allPersons: LiveData<List<PersonEntity>> = personRepository.getAllPerson().asLiveData()
     private val _searchedPersons = MutableLiveData<List<PersonEntity>>()
     val searchedPersons: LiveData<List<PersonEntity>> get() = _searchedPersons
 
     init {
-        // Inicializa com a lista completa de pessoas
+        // Inicializa com a lista de pessoas do banco local
         getAllPersons()
     }
 
-    // Função para obter todas as pessoas
+    // Obtém todas as pessoas do banco local (Room)
     private fun getAllPersons() {
         viewModelScope.launch(dispatcher) {
             personRepository.getAllPerson().collect { personList ->
@@ -45,39 +32,51 @@ class PersonViewModel(
         }
     }
 
-    // Função para adicionar uma pessoa
+    // Obtém todas as pessoas da API e atualiza o LiveData
+    fun fetchPeopleFromApi() {
+        viewModelScope.launch(dispatcher) {
+            personRepository.fetchPeopleFromApi().collect { people ->
+                _searchedPersons.postValue(people)
+            }
+        }
+    }
+
+    // Busca na API com um termo de pesquisa
+    fun searchPeopleFromApi(query: String) {
+        viewModelScope.launch(dispatcher) {
+            personRepository.searchPeopleFromApi(query).collect { result ->
+                _searchedPersons.postValue(result)
+            }
+        }
+    }
+
     fun addPerson(personEntity: PersonEntity) {
         viewModelScope.launch(dispatcher) {
             personRepository.insertPerson(personEntity)
         }
     }
 
-    // Função para excluir uma pessoa
     fun deletePerson(personEntity: PersonEntity) {
         viewModelScope.launch(dispatcher) {
             personRepository.deletePerson(personEntity)
         }
     }
 
-    // Função para atualizar os dados de uma pessoa
     fun updatePerson(personEntity: PersonEntity) {
         viewModelScope.launch(dispatcher) {
             personRepository.updatePerson(personEntity)
         }
     }
 
-    // Função para excluir uma pessoa pelo ID
     fun deletePersonById(personEntity: PersonEntity) {
         viewModelScope.launch(dispatcher) {
             personRepository.deletePersonById(personEntity)
         }
     }
 
-    // Função para procurar uma pessoa com base no nome, idade ou cidade
     fun getSearchedData(query: String = "") {
         viewModelScope.launch(dispatcher) {
-            val result: Flow<List<PersonEntity>> = personRepository.getSearchedData(query)
-            result.collect { personList ->
+            personRepository.getSearchedData(query).collect { personList ->
                 _searchedPersons.postValue(personList)
             }
         }

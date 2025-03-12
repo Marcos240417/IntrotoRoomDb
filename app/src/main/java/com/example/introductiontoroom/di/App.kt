@@ -11,7 +11,11 @@ class App: Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(appModule)
+            modules(appModule,
+                cepNetworkModule,
+                networkModule)
+
+
         }
     }
 }

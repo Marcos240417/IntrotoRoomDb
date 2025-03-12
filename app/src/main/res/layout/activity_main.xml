@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/blue_grayish"
     android:fitsSystemWindows="true"
-    tools:context=".view.person.ParsonActivity">
+    tools:context=".view.person.PersonActivity">
 
 
      <androidx.recyclerview.widget.RecyclerView

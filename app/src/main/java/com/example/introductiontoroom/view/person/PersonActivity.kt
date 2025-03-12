@@ -4,19 +4,18 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.introductiontoroom.data.model.PersonEntity
 import com.example.introductiontoroom.databinding.ActivityMainBinding
 import com.example.introductiontoroom.viewmodel.PersonViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonListener,
+class PersonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonListener,
     PersonDetailsClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: PersonDetailsAdapter
-    private val personViewModel: PersonViewModel by viewModel() //  Koin injeta automaticamente
+    private val personViewModel: PersonViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +43,7 @@ class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonL
         binding.searchcView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null)
-                    onQueryChanged(newText)
+                newText?.let { onQueryChanged(it) }
                 return true
             }
         })
@@ -57,7 +55,7 @@ class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonL
 
     private fun showBottomSheet(personEntity: PersonEntity? = null) {
         val bottomSheet = AddEditPersonFragment(this, personEntity)
-        bottomSheet.show(supportFragmentManager, AddEditPersonFragment.Companion.TAG)
+        bottomSheet.show(supportFragmentManager, AddEditPersonFragment.TAG)
     }
 
     override fun onSavedBtnClicked(isUpdate: Boolean, personEntity: PersonEntity) {
@@ -74,13 +72,11 @@ class ParsonActivity : AppCompatActivity(), AddEditPersonFragment.AddEditPersonL
 
     override fun onDeletePersonClick(personEntity: PersonEntity) {
         personViewModel.deletePerson(personEntity)
-        personViewModel.deletePersonById(personEntity)
     }
 
     private fun subscribeDataStreams() {
-        personViewModel.searchedPersons.observe(this, Observer { personList ->
+        personViewModel.searchedPersons.observe(this) { personList ->
             adapter.submitList(personList)
-        })
+        }
     }
 }
-
