@@ -4,7 +4,6 @@ import com.example.introductiontoroom.ui_compose.network.AddressService
 import com.example.introductiontoroom.ui_compose.repositorys.response.AddressResponse
 
 class AddressRepository(
-
     private val addressService: AddressService
 ) {
 
@@ -12,4 +11,6 @@ class AddressRepository(
 
         return addressService.findAddress(cep)
     }
+
+
 }

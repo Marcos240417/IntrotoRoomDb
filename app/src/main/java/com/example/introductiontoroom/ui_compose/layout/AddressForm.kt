@@ -1,18 +1,21 @@
-package com.example.introductiontoroom.ui_compose
+package com.example.introductiontoroom.ui_compose.layout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,6 +41,7 @@ import com.example.introductiontoroom.ui_compose.ui.theme.IntroductionToRoomThem
 fun AddressForm(
     uiState: AddressFormUiState,
     onSearchAddressClick: (String) -> Unit,
+    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier.fillMaxSize()) {
@@ -80,7 +84,8 @@ fun AddressForm(
                 mutableStateOf("")
             }
             Row(
-                Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .width(300.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextField(
@@ -91,12 +96,21 @@ fun AddressForm(
                         }
                     },
                     Modifier.weight(1f),
+
                     label = {
                         Text(text = "CEP")
                     },
                     visualTransformation = CepVisualTransformation
                 )
-                IconButton(onClick = { onSearchAddressClick(cep) }) {
+                Spacer(modifier = Modifier.width(28.dp)) // Espaçamento entre o TextField e o Icon
+
+                IconButton(onClick = { onSearchAddressClick(cep) },
+                    modifier = Modifier
+                        .weight(0.5f) // Define um peso para o IconButton
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .align(Alignment.CenterVertically)
+                        ) {
                     Icon(
                         Icons.Default.Search,
                         "lupa indicando ação de busca",
@@ -170,8 +184,18 @@ fun AddressForm(
                 }
             )
         }
+        // Botão de Salvar Cadastro
+        Button(
+            onClick = { onSaveClick() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
+            Text(text = "Salvar Cadastro")
+        }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -180,7 +204,8 @@ fun AddressFormPreview() {
         Surface(color = MaterialTheme.colorScheme.background) {
             AddressForm(
                 uiState = AddressFormUiState(),
-                onSearchAddressClick = {}
+                onSearchAddressClick = {},
+                onSaveClick = {}
             )
         }
     }

@@ -6,6 +6,9 @@ import com.example.introductiontoroom.data.PersonRepository
 import com.example.introductiontoroom.data.PersonRepositoryImpl
 import com.example.introductiontoroom.ui_compose.network.AddressService
 import com.example.introductiontoroom.ui_compose.repositorys.AddressRepository
+import com.example.introductiontoroom.ui_compose.repositorys.response.AddressDao
+import com.example.introductiontoroom.ui_compose.repositorys.response.AddressRoomRepository
+import com.example.introductiontoroom.ui_compose.repositorys.response.AddressRoomViewModel
 import com.example.introductiontoroom.viewmodel.AddressViewModel
 import com.example.introductiontoroom.viewmodel.PersonViewModel
 import com.squareup.moshi.Moshi
@@ -23,15 +26,15 @@ val appModule = module {
     // Banco de Dados
     single { AppDatabase.getDatabase(androidContext()) }
     single<PersonDao> { get<AppDatabase>().personDao() }
+    single<AddressDao> { get<AppDatabase>().addresDao() } // Certifique-se de que o método existe
 
-
-    // Repositório
+    // Repositórios
     single<PersonRepository> { PersonRepositoryImpl(get<PersonDao>()) }
+    single<AddressRoomRepository> { AddressRoomRepository(get<AddressDao>()) }
 
     // ViewModels
     viewModel { PersonViewModel(get<PersonRepository>()) }
-
-
+    viewModel { AddressRoomViewModel(get<AddressRoomRepository>()) }
 }
 
 
@@ -44,6 +47,7 @@ val cepNetworkModule = module {
 
 
 }
+
     val networkModule = module {
         // Retrofit e OkHttpClient
         single {

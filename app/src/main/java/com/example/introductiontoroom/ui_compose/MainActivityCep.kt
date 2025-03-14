@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.introductiontoroom.ui_compose.layout.AddressForm
 import com.example.introductiontoroom.ui_compose.ui.theme.IntroductionToRoomTheme
 import com.example.introductiontoroom.viewmodel.AddressViewModel
 import kotlinx.coroutines.launch
@@ -29,21 +30,23 @@ class MainActivityCep : ComponentActivity() {
                     val viewModel = koinViewModel<AddressViewModel>()
                     val uiState = viewModel.uiState.collectAsState().value
                     AddressForm(
-                        uiState,
+                        uiState = uiState,
                         onSearchAddressClick = { cep ->
                             scope.launch {
                                 viewModel.findAddress(cep)
                             }
+                        },
+                        onSaveClick = {
+                            scope.launch {
+                                // Implemente a lógica de salvamento aqui
+                                viewModel.saveForm()
+                            }
                         }
                     )
+
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun ShowAddressFormPreview() {
-
-}

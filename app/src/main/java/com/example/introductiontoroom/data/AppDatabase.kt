@@ -7,11 +7,14 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.introductiontoroom.data.model.PersonEntity
+import com.example.introductiontoroom.ui_compose.repositorys.response.AddressDao
+import com.example.introductiontoroom.ui_compose.repositorys.response.Registrationform
 
-@Database(version = 2, entities = [PersonEntity::class], exportSchema = false)
+@Database(version = 2, entities = [PersonEntity::class, Registrationform::class], exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun personDao(): PersonDao
+    abstract fun addresDao(): AddressDao // Novo DAO para Registrationform
 
     companion object {
 
