@@ -1,52 +1,43 @@
 package com.example.introductiontoroom.di
 
-import com.example.introductiontoroom.data.AppDatabase
-import com.example.introductiontoroom.data.PersonDao
-import com.example.introductiontoroom.data.PersonRepository
-import com.example.introductiontoroom.data.PersonRepositoryImpl
-import com.example.introductiontoroom.ui_compose.network.AddressService
-import com.example.introductiontoroom.ui_compose.repositorys.AddressRepository
-import com.example.introductiontoroom.ui_compose.repositorys.response.AddressDao
-import com.example.introductiontoroom.ui_compose.repositorys.response.AddressRoomRepository
-import com.example.introductiontoroom.ui_compose.repositorys.response.AddressRoomViewModel
-import com.example.introductiontoroom.viewmodel.AddressViewModel
-import com.example.introductiontoroom.viewmodel.PersonViewModel
+import com.example.introductiontoroom.introduction.data.AppDatabase
+import com.example.introductiontoroom.introduction.data.PersonDao
+import com.example.introductiontoroom.introduction.data.PersonRepository
+import com.example.introductiontoroom.introduction.data.PersonRepositoryImpl
+import com.example.introductiontoroom.introduction.viewmodel.PersonViewModel
+import com.example.ui_compose.dataaddres.AddressRepository
+import com.example.ui_compose.dataaddres.model.network.AddressService
+import com.example.ui_compose.ui.AddressViewModel
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 val appModule = module {
-    // Banco de Dados
-    single { AppDatabase.getDatabase(androidContext()) }
-    single<PersonDao> { get<AppDatabase>().personDao() }
-    single<AddressDao> { get<AppDatabase>().addresDao() } // Certifique-se de que o método existe
-
-    // Repositórios
-    single<PersonRepository> { PersonRepositoryImpl(get<PersonDao>()) }
-    single<AddressRoomRepository> { AddressRoomRepository(get<AddressDao>()) }
-
-    // ViewModels
-    viewModel { PersonViewModel(get<PersonRepository>()) }
-    viewModel { AddressRoomViewModel(get<AddressRoomRepository>()) }
+    single { AppDatabase.getDatabase(androidContext()) } // Instância do banco de dados
+    single { get<AppDatabase>().personDao() } // DAO da tabela Person
+    single <PersonRepository> { PersonRepositoryImpl(get<PersonDao>())} // Repositório para Person
+    viewModel { PersonViewModel(get()) } // ViewModel para Person
 }
 
 
 val cepNetworkModule = module {
-    // Repositório de Endereço
-    singleOf(::AddressRepository) // Registrando o repositório
+    single {
+        AddressRepository(get<AddressService>()) // AddressRepository depende do AddressService
+    }
 
-    // ViewModel de Endereço
-    viewModel { AddressViewModel(get()) }
-
-
+    viewModel {
+        AddressViewModel(get()) // ViewModel depende do AddressRepository
+    }
 }
+
+
+
 
     val networkModule = module {
         // Retrofit e OkHttpClient
@@ -69,7 +60,7 @@ val cepNetworkModule = module {
                             .build()
                     )
                 )
-                .client(cliente) // Adiciona o cliente OkHttp configurado
+                .client(cliente) // Usa o OkHttpClient configurado acima
                 .build()
 
             retrofit.create(AddressService::class.java) // Cria a implementação da interface AddressService
