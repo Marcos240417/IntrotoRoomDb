@@ -28,7 +28,7 @@ val appModule = module {
 
 val cepNetworkModule = module {
     single {
-        AddressRepository(get<AddressService>()) // AddressRepository depende do AddressService
+        AddressRepository(get<AddressService>(), get<PersonDao>()) // AddressRepository depende do AddressService
     }
 
     viewModel {

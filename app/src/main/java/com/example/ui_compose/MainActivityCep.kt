@@ -19,16 +19,20 @@ import org.koin.androidx.compose.koinViewModel
 class MainActivityCep : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             IntroductionToRoomTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val scope = rememberCoroutineScope()
-                    val viewModel = koinViewModel<AddressViewModel>()
-                    val uiState = viewModel.uiState.collectAsState().value
-                    val uiStateRoom = PersonEntity(
+                    // Obter instância do ViewModel com Koin
+                    val addressViewModel = koinViewModel<AddressViewModel>()
+                    val uiState = addressViewModel.uiState.collectAsState().value // Observa o estado
+                    val coroutineScope = rememberCoroutineScope()
+
+                    // Estado inicial da entidade Room
+                    val initialPersonEntity = PersonEntity(
                         pId = 0,
                         name = "",
                         dateBirth = "",
@@ -48,18 +52,19 @@ class MainActivityCep : ComponentActivity() {
                         email = null
                     )
 
+                    // Formulário de endereço
                     AddressForm(
                         uiState = uiState,
-                        uiStateRoom = uiStateRoom, // Agora sendo passado corretamente
+                        uiStateRoom = initialPersonEntity,
                         onSearchAddressClick = { cep ->
-                            scope.launch {
-                                viewModel.findAddress(cep)
+                            coroutineScope.launch {
+                                addressViewModel.findAddress(cep, initialPersonEntity)
                             }
-                        }
+                        },
+                        viewModel = null // Se necessário, passar o PersonViewModel aqui
                     )
                 }
             }
         }
     }
 }
-

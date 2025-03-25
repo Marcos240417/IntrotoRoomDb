@@ -55,8 +55,7 @@ class AddEditPersonFragment(
             val name = binding.personNameEt.text.toString()
             val dateBirth = binding.personDateBirth.text.toString()
             val nsus = binding.personSusEt.text.toString() // Número do SUS
-            val cep =
-                "" // Adicione o campo de entrada correspondente no layout ou defina um valor padrão
+            val cep = "" // Adicione o campo de entrada correspondente no layout ou defina um valor padrão
             val logradouro = "" // Outros campos obrigatórios
             val number = ""
             val bairro = ""

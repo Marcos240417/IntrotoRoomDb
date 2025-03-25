@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AddressResponse(
+    @SerialName("cep")
+    val cep: String = "",
     @SerialName("logradouro")
     val logradouro: String = "",
     @SerialName("bairro")
@@ -19,7 +21,7 @@ data class AddressResponse(
     val estado: String = "",
     val isLoading: Boolean = false,
     val isError: Boolean = false,
-    val data: ArrayList<PersonEntity>
+
 )
 
 

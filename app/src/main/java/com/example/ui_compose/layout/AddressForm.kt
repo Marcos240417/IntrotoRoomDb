@@ -54,7 +54,7 @@ fun AddressForm(
     val context = LocalContext.current
 
     // Variáveis observáveis para os campos do formulário
-    var cep by remember { mutableStateOf(uiStateRoom.cep) }
+    var cep by remember { mutableStateOf(uiState.cep) }
     var rua by remember { mutableStateOf(uiState.logradouro) }
     var numero by remember { mutableStateOf(uiStateRoom.number) }
     var bairro by remember { mutableStateOf(uiState.bairro) }
@@ -281,13 +281,14 @@ fun AddressFormPreview() {
         Surface(color = MaterialTheme.colorScheme.background) {
             AddressForm(
                 uiState = AddressResponse(
+                    cep = "12345678",
                     logradouro = "Rua Exemplo",
                     bairro = "Bairro Exemplo",
                     localidade = "Cidade Exemplo",
                     estado = "Estado Exemplo",
                     isLoading = false,
-                    isError = false,
-                    data = arrayListOf()
+                    isError = false
+
                 ),
                 onSearchAddressClick = {},
                 viewModel = null, // No preview, ViewModel é opcional
