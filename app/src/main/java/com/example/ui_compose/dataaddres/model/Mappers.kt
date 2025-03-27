@@ -9,7 +9,15 @@ object AddressMapper {
             logradouro = addressResponse.logradouro,
             bairro = addressResponse.bairro,
             cidade = addressResponse.localidade,
-            estado = addressResponse.estado
+            estado = addressResponse.estado,
+            sexo = "",
+            maritalStatus = "",
+            nationality = "",
+            identityRG = "",
+            identityCPF = "",
+            phone = "",
+            email = null
+
         )
     }
 }

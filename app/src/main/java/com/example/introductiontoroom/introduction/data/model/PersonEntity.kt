@@ -22,7 +22,9 @@ data class PersonEntity(
     @ColumnInfo("person_identity_rg") val identityRG: String,
     @ColumnInfo("person_identity_cpf") val identityCPF: String,
     @ColumnInfo("person_phone") val phone: String,
-    @ColumnInfo("person_email") val email: String?
+    @ColumnInfo("person_email") val email: String?,
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
 
 )
 

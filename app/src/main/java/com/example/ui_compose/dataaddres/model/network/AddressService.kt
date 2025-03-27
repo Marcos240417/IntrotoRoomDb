@@ -1,13 +1,16 @@
 package com.example.ui_compose.dataaddres.model.network
 
-import com.example.ui_compose.dataaddres.AddressService
 import com.example.ui_compose.dataaddres.model.AddressResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-interface AddressService : AddressService {
+
+interface AddressService {
 
     @GET("{cep}/json/")
-    override suspend fun findAddress(@Path("cep") cep: String): AddressResponse
+    suspend fun findAddress(@Path("cep") cep: String): AddressResponse
+
+    @GET("addresses")
+    suspend fun fetchAddresses(): List<AddressResponse> // Exemplo para múltiplos endereços
 
 }

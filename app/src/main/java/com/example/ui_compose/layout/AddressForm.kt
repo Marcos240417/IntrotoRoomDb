@@ -6,12 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -37,39 +35,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alura.ondefica.ui.transformations.CepVisualTransformation
 import com.example.introductiontoroom.introduction.data.model.PersonEntity
-import com.example.introductiontoroom.introduction.viewmodel.PersonViewModel
-import com.example.ui_compose.dataaddres.model.AddressResponse
 import com.example.ui_compose.theme.IntroductionToRoomTheme
 
 
 @Composable
 fun AddressForm(
-    uiState: AddressResponse,
-    uiStateRoom: PersonEntity,
+
+    uiState: PersonEntity,
+    onSaveAddressClick: (PersonEntity) -> Unit, // Definindo que a função aceita um PersonEntity
     onSearchAddressClick: (String) -> Unit,
-    viewModel: PersonViewModel? = null, // Torna o ViewModel opcional
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
+
+
+
 ) {
-    // Obter o contexto correto para exibir Toast
-    val context = LocalContext.current
-
-    // Variáveis observáveis para os campos do formulário
-    var cep by remember { mutableStateOf(uiState.cep) }
-    var rua by remember { mutableStateOf(uiState.logradouro) }
-    var numero by remember { mutableStateOf(uiStateRoom.number) }
-    var bairro by remember { mutableStateOf(uiState.bairro) }
-    var cidade by remember { mutableStateOf(uiState.localidade) }
-    var estado by remember { mutableStateOf(uiState.estado) }
-    var sexo by remember { mutableStateOf("") }
-    var maritalstatus by remember { mutableStateOf("") }
-    var nationality by remember { mutableStateOf("") }
-    var identityRG by remember { mutableStateOf("") }
-    var identityCPF by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-
     Column(modifier.fillMaxSize()) {
-        // Tratamento de estados de erro e carregamento
         when {
             uiState.isError -> {
                 Box(
@@ -88,26 +68,26 @@ fun AddressForm(
             }
 
             uiState.isLoading -> {
-                Box(modifier = Modifier.fillMaxWidth()) {
+                Box(Modifier.fillMaxWidth()) {
                     CircularProgressIndicator(
-                        modifier = Modifier
+                        Modifier
                             .padding(8.dp)
                             .align(Alignment.Center)
                     )
                 }
             }
         }
-
-        // Formulário de entrada
         Column(
             modifier
                 .verticalScroll(rememberScrollState())
                 .padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val addressTextFieldModifier = Modifier.fillMaxWidth()
-
-            // Campo de CEP com botão de busca
+            val addressTextFieldModifier = Modifier
+                .fillMaxWidth()
+            var cep by remember {
+                mutableStateOf("")
+            }
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -125,141 +105,185 @@ fun AddressForm(
                     },
                     visualTransformation = CepVisualTransformation
                 )
-                Spacer(modifier = Modifier.width(8.dp)) // Espaço entre o campo e o ícone
-
-                IconButton(onClick = { onSearchAddressClick(cep) }
-                ) {
+                IconButton(onClick = { onSearchAddressClick(cep) }) {
                     Icon(
                         Icons.Default.Search,
                         "lupa indicando ação de busca",
                         Modifier.fillMaxHeight()
-
-
                     )
                 }
             }
-
-            // Campos de Logradouro, Número, Bairro, Cidade e Estado
+            var logradouro by remember(uiState.logradouro) {
+                mutableStateOf(uiState.logradouro)
+            }
             TextField(
-                value = rua,
-                onValueChange = { rua = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "Logradouro") }
+                value = logradouro,
+                onValueChange = {
+                    logradouro = it
+                },
+                addressTextFieldModifier,
+                label = {
+                    Text(text = "Logradouro")
+                }
             )
-
+            var numero by remember {
+                mutableStateOf("")
+            }
             TextField(
                 value = numero,
-                onValueChange = { numero = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "Número") }
+                onValueChange = {
+                    numero = it
+                },
+                addressTextFieldModifier,
+                label = {
+                    Text(text = "Número")
+                }
             )
-
+            var bairro by remember(uiState.bairro) {
+                mutableStateOf(uiState.bairro)
+            }
             TextField(
                 value = bairro,
-                onValueChange = { bairro = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "Bairro") }
+                onValueChange = {
+                    bairro = it
+                },
+                addressTextFieldModifier,
+                label = {
+                    Text(text = "Bairro")
+                }
             )
-
+            var cidade by remember(uiState.cidade) {
+                mutableStateOf(uiState.cidade)
+            }
             TextField(
                 value = cidade,
-                onValueChange = { cidade = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "Cidade") }
+                onValueChange = {
+                    cidade = it
+                },
+                addressTextFieldModifier,
+                label = {
+                    Text(text = "Cidade")
+                }
             )
-
+            var estado by remember(uiState.estado) {
+                mutableStateOf(uiState.estado)
+            }
             TextField(
                 value = estado,
-                onValueChange = { estado = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "Estado") }
+                onValueChange = {
+                    estado = it
+                },
+                addressTextFieldModifier,
+                label = {
+                    Text(text = "Estado")
+                }
             )
 
-            // Adiciona campos para informações adicionais
+            var sexo by remember(uiState.sexo) {
+                mutableStateOf(uiState.sexo)
+            }
             TextField(
                 value = sexo,
-                onValueChange = { sexo = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "Sexo") }
+                onValueChange = {
+                    sexo = it
+                },
+                addressTextFieldModifier,
+                label = {
+                    Text(text = "Sexo")
+                }
             )
 
+            var maritalstatus by remember(uiState.maritalStatus) {
+                mutableStateOf(uiState.maritalStatus)
+            }
             TextField(
                 value = maritalstatus,
-                onValueChange = { maritalstatus = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "Estado Civil") }
-            )
+                onValueChange = {
+                    maritalstatus = it
+                })
 
+            var nationality by remember(uiState.nationality) {
+                mutableStateOf(uiState.nationality)
+            }
             TextField(
                 value = nationality,
-                onValueChange = { nationality = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "Nacionalidade") }
+                onValueChange = {
+                    nationality = it
+                },
+                addressTextFieldModifier,
+                label = {
+                    Text(text = "Nacionalidade")
+                }
             )
-
+            var identityRG by remember(uiState.identityRG) {
+                mutableStateOf(uiState.identityRG)
+            }
             TextField(
                 value = identityRG,
-                onValueChange = { identityRG = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "RG") }
-            )
-
+                onValueChange = {
+                    identityRG = it
+                },
+                addressTextFieldModifier,
+                label = {
+                    Text(text = "RG")
+                })
+            var identityCPF by remember(uiState.identityCPF) {
+                mutableStateOf(uiState.identityCPF)
+            }
             TextField(
                 value = identityCPF,
-                onValueChange = { identityCPF = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "CPF") }
-            )
+                onValueChange = {
+                    identityCPF = it
+                },
+                addressTextFieldModifier,
+                label = {
+                    Text(text = "CPF")
+                })
 
+            var phone by remember(uiState.phone) {
+                mutableStateOf(uiState.phone)
+            }
             TextField(
                 value = phone,
-                onValueChange = { phone = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "Celular") }
+                onValueChange = {
+                    phone = it
+                },
+                addressTextFieldModifier,
+                label = {
+                    Text(text = "Celular")
+                }
             )
-
+            var email by remember(uiState.email) {
+                mutableStateOf(uiState.email)
+            }
             TextField(
-                value = email,
-                onValueChange = { email = it },
-                modifier = addressTextFieldModifier,
-                label = { Text(text = "Email") }
-            )
+                value = email?: "",
+                onValueChange = {
+                    email = it
+                },
+                addressTextFieldModifier,
+                label = {
+                    Text(text = "Email")
+                })
 
             // Botão para salvar os dados
+            val context = LocalContext.current
             Button(
                 onClick = {
-                    if (cep.isNotBlank() && rua.isNotBlank() && numero.isNotBlank() && bairro.isNotBlank() && cidade.isNotBlank() && estado.isNotBlank()) {
-                        val personEntity = PersonEntity(
-                            pId = uiStateRoom.pId,
-                            name = uiStateRoom.name,
-                            dateBirth = uiStateRoom.dateBirth,
-                            nsus = uiStateRoom.nsus,
-                            cep = cep,
-                            logradouro = rua,
-                            number = numero,
-                            bairro = bairro,
-                            cidade = cidade,
-                            estado = estado,
-                            sexo = sexo,
-                            maritalStatus = maritalstatus,
-                            nationality = nationality,
-                            identityRG = identityRG,
-                            identityCPF = identityCPF,
-                            phone = phone,
-                            email = email
-                        )
-
-                        // Chama a função do ViewModel para salvar ou atualizar
-                        viewModel?.let {
-                            if (personEntity.pId == 0) {
-                                it.addPerson(personEntity) // Adiciona nova pessoa
-                            } else {
-                                it.updatePerson(personEntity) // Atualiza pessoa existente
-                            }
-                        } ?: Toast.makeText(context, "ViewModel não disponível", Toast.LENGTH_SHORT).show()
+                    if (cep.isNotBlank() && uiState.logradouro.isNotBlank() && uiState.number.isNotBlank()
+                        && uiState.bairro.isNotBlank() && uiState.cidade.isNotBlank() && uiState.estado.isNotBlank()
+                    ) {
+                        // Não é necessário criar a variável `personEntity` separada
+                        onSaveAddressClick(
+                            uiState.copy(cep = cep)
+                        ) // Enviando diretamente os dados para salvar
                     } else {
-                        // Mensagem de erro
-                        Toast.makeText(context, "Preencha todos os campos obrigatórios!", Toast.LENGTH_SHORT).show()
+                        // Exibe uma mensagem de erro caso algum campo necessário esteja vazio
+                        Toast.makeText(
+                            context,
+                            "Preencha todos os campos obrigatórios!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 },
                 modifier = Modifier
@@ -269,9 +293,7 @@ fun AddressForm(
                 Text("Salvar Cadastro")
             }
         }
-        }
-
-
+    }
 }
 
 @Preview(showBackground = true)
@@ -280,37 +302,28 @@ fun AddressFormPreview() {
     IntroductionToRoomTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             AddressForm(
-                uiState = AddressResponse(
-                    cep = "12345678",
-                    logradouro = "Rua Exemplo",
-                    bairro = "Bairro Exemplo",
-                    localidade = "Cidade Exemplo",
-                    estado = "Estado Exemplo",
-                    isLoading = false,
-                    isError = false
-
-                ),
-                onSearchAddressClick = {},
-                viewModel = null, // No preview, ViewModel é opcional
-                uiStateRoom = PersonEntity(
+                uiState = PersonEntity(
                     pId = 1,
-                    name = "Nome Exemplo",
-                    dateBirth = "01/01/1990",
-                    nsus = "123456789",
-                    cep = "12345678",
-                    logradouro = "Rua Exemplo",
+                    name = "",
+                    dateBirth = "",
+                    nsus = "",
+                    cep = "",
+                    logradouro = "",
                     number = "10",
-                    bairro = "Bairro Exemplo",
-                    cidade = "Cidade Exemplo",
-                    estado = "Estado Exemplo",
-                    sexo = "Masculino",
-                    maritalStatus = "Solteiro",
-                    nationality = "Brasileira",
-                    identityRG = "123456789",
-                    identityCPF = "987654321",
-                    phone = "1234567890",
-                    email = "email@exemplo.com"
-                )
+                    bairro = "",
+                    cidade = "",
+                    estado = "",
+                    sexo = "",
+                    maritalStatus = "",
+                    nationality = "",
+                    identityRG = "",
+                    identityCPF = "",
+                    phone = "",
+                    email = ""
+                ),
+
+                onSearchAddressClick = {},
+                onSaveAddressClick = {}
             )
         }
     }

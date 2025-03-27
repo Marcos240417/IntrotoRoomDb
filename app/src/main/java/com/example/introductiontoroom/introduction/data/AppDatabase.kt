@@ -7,18 +7,20 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.introductiontoroom.introduction.data.model.PersonEntity
+import com.example.ui_compose.dataaddres.model.AddressDao
 
-@Database(version = 3, entities = [PersonEntity::class], exportSchema = false)
+@Database(version = 4, entities = [PersonEntity::class], exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun personDao(): PersonDao
+    abstract fun addressDao(): AddressDao
 
     companion object {
 
         @Volatile
         private var INSTACE: AppDatabase? = null
 
-        val MIGRATION_1_2 = object : Migration(2, 3) {
+        val MIGRATION_1_2 = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // Adicionando as colunas que estavam faltando
                 // Adicione as colunas que estão faltando

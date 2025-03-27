@@ -31,37 +31,36 @@ class MainActivityCep : ComponentActivity() {
                     val uiState = addressViewModel.uiState.collectAsState().value // Observa o estado
                     val coroutineScope = rememberCoroutineScope()
 
-                    // Estado inicial da entidade Room
-                    val initialPersonEntity = PersonEntity(
-                        pId = 0,
-                        name = "",
-                        dateBirth = "",
-                        nsus = "",
-                        cep = "",
-                        logradouro = "",
-                        number = "",
-                        bairro = "",
-                        cidade = "",
-                        estado = "",
-                        sexo = "",
-                        maritalStatus = "",
-                        nationality = "",
-                        identityRG = "",
-                        identityCPF = "",
-                        phone = "",
-                        email = null
-                    )
-
                     // Formulário de endereço
                     AddressForm(
-                        uiState = uiState,
-                        uiStateRoom = initialPersonEntity,
+                        uiState = uiState.selectedAddress ?: PersonEntity(
+                            pId = 0,
+                            name = null.toString(),
+                            dateBirth = null.toString(),
+                            nsus = null.toString(),
+                            cep = "",
+                            logradouro = "",
+                            number = "",
+                            bairro = "",
+                            cidade = "",
+                            estado = "",
+                            sexo = "",
+                            maritalStatus = "",
+                            nationality = "",
+                            identityRG = "",
+                            identityCPF = "",
+                            phone = "",
+                            email = ""
+                        ), // Passa o estado completo que inclui os dados da API
                         onSearchAddressClick = { cep ->
-                            coroutineScope.launch {
-                                addressViewModel.findAddress(cep, initialPersonEntity)
-                            }
+                            addressViewModel.fetchAddressFromApi(cep)
                         },
-                        viewModel = null // Se necessário, passar o PersonViewModel aqui
+                        onSaveAddressClick = { // Função para salvar no banco de dados
+                            coroutineScope.launch {
+                                // Chama a função do ViewModel para salvar ou atualizar no banco
+                                addressViewModel.confirmSaveAddress()
+                            }
+                        }
                     )
                 }
             }
