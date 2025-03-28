@@ -47,8 +47,9 @@ fun AddressForm(
     modifier: Modifier = Modifier,
 
 
-
 ) {
+
+
     Column(modifier.fillMaxSize()) {
         when {
             uiState.isError -> {
@@ -85,6 +86,37 @@ fun AddressForm(
         ) {
             val addressTextFieldModifier = Modifier
                 .fillMaxWidth()
+            val textFieldModifier = Modifier.fillMaxWidth()
+
+            // Usando Koin para obter o ViewModel
+
+            var name by remember { mutableStateOf(uiState.name) }
+            TextField(
+                value = name,
+                onValueChange = { name = it },
+                modifier = textFieldModifier,
+                label = { Text(text = "Nome") }
+            )
+
+
+            var dateBirth by remember(uiState.dateBirth)
+            { mutableStateOf(uiState.dateBirth) }
+            TextField(
+                value = dateBirth,
+                onValueChange = { dateBirth = uiState.dateBirth },
+                textFieldModifier,
+                label = { Text(text = "Data de Nascimento") }
+            )
+
+            var nsus by remember(uiState.nsus)
+            { mutableStateOf(uiState.nsus) }
+            TextField(
+                value = nsus,
+                onValueChange = { nsus = uiState.nsus },
+                textFieldModifier,
+                label = { Text(text = "Número do SUS") }
+            )
+
             var cep by remember {
                 mutableStateOf("")
             }
@@ -200,7 +232,9 @@ fun AddressForm(
                 value = maritalstatus,
                 onValueChange = {
                     maritalstatus = it
-                })
+                },
+                addressTextFieldModifier,
+                label = { Text(text = "Estado Civil") })
 
             var nationality by remember(uiState.nationality) {
                 mutableStateOf(uiState.nationality)
@@ -272,6 +306,7 @@ fun AddressForm(
                 onClick = {
                     if (cep.isNotBlank() && uiState.logradouro.isNotBlank() && uiState.number.isNotBlank()
                         && uiState.bairro.isNotBlank() && uiState.cidade.isNotBlank() && uiState.estado.isNotBlank()
+
                     ) {
                         // Não é necessário criar a variável `personEntity` separada
                         onSaveAddressClick(
@@ -309,7 +344,7 @@ fun AddressFormPreview() {
                     nsus = "",
                     cep = "",
                     logradouro = "",
-                    number = "10",
+                    number = "",
                     bairro = "",
                     cidade = "",
                     estado = "",
@@ -323,7 +358,9 @@ fun AddressFormPreview() {
                 ),
 
                 onSearchAddressClick = {},
-                onSaveAddressClick = {}
+                onSaveAddressClick = {},
+                modifier = Modifier,
+
             )
         }
     }
