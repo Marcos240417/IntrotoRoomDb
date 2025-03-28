@@ -22,7 +22,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 val appModule = module {
     single { AppDatabase.getDatabase(androidContext()) } // Instância do banco de dados
     single { get<AppDatabase>().personDao() } // DAO da tabela Person
-    single { get<AppDatabase>().addressDao() } // DAO da tabela Address
+
 
     single<PersonRepository> { PersonRepositoryImpl(get<PersonDao>()) } // Repositório para Person
     viewModel { PersonViewModel(get()) } // ViewModel para Person
@@ -34,6 +34,7 @@ val cepNetworkModule = module {
     single<AddressRepository> { AddressRepositoryImpl(get(), get())
     } // AddressRepository depende do AddressService
 
+    single { get<AppDatabase>().addressDao() } // DAO da tabela Address
 
     viewModel {
         AddressViewModel(get()) // ViewModel depende do AddressRepository

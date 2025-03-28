@@ -31,6 +31,8 @@ class MainActivityCep : ComponentActivity() {
                     val uiState = addressViewModel.uiState.collectAsState().value // Observa o estado
                     val coroutineScope = rememberCoroutineScope()
 
+
+
                     // Formulário de endereço
                     AddressForm(
                         uiState = uiState.selectedAddress ?: PersonEntity(

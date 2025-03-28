@@ -81,19 +81,19 @@ class AddEditPersonFragment(
                     name = name,
                     dateBirth = dateBirth,
                     nsus = nsus,
-                    cep = cep,
-                    logradouro = logradouro,
-                    number = number,
-                    bairro = bairro,
-                    cidade = cidade,
-                    estado = estado,
-                    sexo = sexo,
-                    maritalStatus = maritalStatus,
-                    nationality = nationality,
-                    identityRG = identityRG,
-                    identityCPF = identityCPF,
-                    phone = phone,
-                    email = email
+                    cep = "",
+                    logradouro = "",
+                    number = "",
+                    bairro = "",
+                    cidade = "",
+                    estado = "",
+                    sexo = "",
+                    maritalStatus = "",
+                    nationality = "",
+                    identityRG = "",
+                    identityCPF = "",
+                    phone = "",
+                    email = ""
                 )
                 listener.onSavedBtnClicked(personEntity != null, updatedPerson)
             } else {
