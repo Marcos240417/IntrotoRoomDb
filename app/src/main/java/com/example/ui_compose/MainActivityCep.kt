@@ -35,9 +35,9 @@ class MainActivityCep : ComponentActivity() {
                     AddressForm(
                         uiState = uiState.selectedAddress ?: PersonEntity(
                             pId = 0,
-                            name = null.toString(),
-                            dateBirth = null.toString(),
-                            nsus = null.toString(),
+                            name = "",
+                            dateBirth = "",
+                            nsus = "",
                             cep = "",
                             logradouro = "",
                             number = "",
