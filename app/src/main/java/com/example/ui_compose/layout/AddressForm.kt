@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -31,11 +32,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alura.ondefica.ui.transformations.CepVisualTransformation
 import com.example.introductiontoroom.introduction.data.model.PersonEntity
 import com.example.ui_compose.theme.IntroductionToRoomTheme
+import com.example.ui_compose.transformations.CPFVisualTransformation
+import com.example.ui_compose.transformations.RGVisualTransformation
 
 
 @Composable
@@ -99,21 +103,19 @@ fun AddressForm(
             )
 
 
-            var dateBirth by remember(uiState.dateBirth)
-            { mutableStateOf(uiState.dateBirth) }
+            var dateBirth by remember { mutableStateOf(uiState.dateBirth) }
             TextField(
                 value = dateBirth,
-                onValueChange = { dateBirth = uiState.dateBirth },
-                textFieldModifier,
+                onValueChange = { dateBirth = it },
+                modifier = textFieldModifier,
                 label = { Text(text = "Data de Nascimento") }
             )
 
-            var nsus by remember(uiState.nsus)
-            { mutableStateOf(uiState.nsus) }
+            var nsus by remember { mutableStateOf(uiState.nsus) }
             TextField(
                 value = nsus,
-                onValueChange = { nsus = uiState.nsus },
-                textFieldModifier,
+                onValueChange = { nsus = it },
+                modifier = textFieldModifier,
                 label = { Text(text = "Número do SUS") }
             )
 
@@ -249,30 +251,40 @@ fun AddressForm(
                     Text(text = "Nacionalidade")
                 }
             )
-            var identityRG by remember(uiState.identityRG) {
-                mutableStateOf(uiState.identityRG)
-            }
+            var identityRG by remember { mutableStateOf(uiState.identityRG) }
+
             TextField(
                 value = identityRG,
-                onValueChange = {
-                    identityRG = it
+                onValueChange = { newValue ->
+                    // Filtra apenas números e limita a 9 caracteres
+                    val onlyDigits = newValue.filter { it.isDigit() }
+                    if (onlyDigits.length <= 9) {
+                        identityRG = onlyDigits
+                    }
                 },
-                addressTextFieldModifier,
-                label = {
-                    Text(text = "RG")
-                })
-            var identityCPF by remember(uiState.identityCPF) {
-                mutableStateOf(uiState.identityCPF)
-            }
+                modifier = addressTextFieldModifier,
+                label = { Text(text = "RG") },
+                visualTransformation = RGVisualTransformation, // Transformação opcional para máscara
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+
+            var identityCPF by remember { mutableStateOf(uiState.identityCPF) }
+
             TextField(
                 value = identityCPF,
-                onValueChange = {
-                    identityCPF = it
+                onValueChange = { newValue ->
+                    val onlyDigits = newValue.filter { it.isDigit() }
+                    if (onlyDigits.length <= 11) {
+                        identityCPF = onlyDigits
+                    }
                 },
-                addressTextFieldModifier,
-                label = {
-                    Text(text = "CPF")
-                })
+                modifier = addressTextFieldModifier,
+                label = { Text(text = "CPF") },
+                visualTransformation = CPFVisualTransformation,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
 
             var phone by remember(uiState.phone) {
                 mutableStateOf(uiState.phone)

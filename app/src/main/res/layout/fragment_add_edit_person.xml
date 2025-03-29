@@ -85,7 +85,7 @@
             android:maxLines="1"
             android:maxLength="18"
             android:textColor="@color/white"
-            android:inputType="date|number"
+            android:inputType="number"
             android:hint="@string/id_SUS" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.button.MaterialButton

@@ -43,6 +43,9 @@ class PersonDetailsAdapter(private val listener: PersonDetailsClickListener) :
                 val intent = Intent(context, MainActivityCep::class.java).apply {
                     // Passando dados através do Intent (pode ser ID ou outro campo relevante)
                     putExtra("person_id", getItem(adapterPosition).pId)
+                    putExtra("person_name", getItem(adapterPosition).name)
+                    putExtra("person_date_birth", getItem(adapterPosition).dateBirth)
+                    putExtra("person_nsus", getItem(adapterPosition).nsus)
                 }
                 context.startActivity(intent)
             }

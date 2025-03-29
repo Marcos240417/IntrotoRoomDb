@@ -52,6 +52,7 @@ class AddEditPersonFragment(
 
     private fun attachUiListener() {
         binding.saveBtn.setOnClickListener {
+            val id = personEntity?.pId ?: 0
             val name = binding.personNameEt.text.toString()
             val dateBirth = binding.personDateBirth.text.toString()
             val nsus = binding.personSusEt.text.toString() // Número do SUS
@@ -69,7 +70,7 @@ class AddEditPersonFragment(
             val phone = ""
             val email = ""
 
-            val id = personEntity?.pId ?: 0
+
 
             if (name.isNotEmpty() && dateBirth.isNotEmpty() && nsus.isNotEmpty() && cep.isEmpty()
                 && logradouro.isEmpty() && number.isEmpty() && bairro.isEmpty() && cidade.isEmpty()

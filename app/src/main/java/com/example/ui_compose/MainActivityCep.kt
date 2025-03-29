@@ -20,6 +20,16 @@ class MainActivityCep : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Recuperar dados do Intent
+        val personId = intent.getIntExtra("person_id", 0) // Exemplo: ID da pessoa
+        val personName = intent.getStringExtra("person_name") // Nome enviado
+        val personDateBirth = intent.getStringExtra("person_date_birth") // Data de nascimento
+        val personNsus = intent.getStringExtra("person_nsus") // Número do SUS
+
+        // Use os dados conforme necessário
+        // Exemplo: Logar os dados no console
+        println("ID: $personId, Nome: $personName, Data Nascimento: $personDateBirth, SUS: $personNsus")
+
         setContent {
             IntroductionToRoomTheme {
                 Surface(
@@ -36,10 +46,10 @@ class MainActivityCep : ComponentActivity() {
                     // Formulário de endereço
                     AddressForm(
                         uiState = uiState.selectedAddress ?: PersonEntity(
-                            pId = 0,
-                            name = "",
-                            dateBirth = "",
-                            nsus = "",
+                            pId = personId,
+                            name = personName ?: "",
+                            dateBirth = personDateBirth ?: "",
+                            nsus = personNsus ?: "",
                             cep = "",
                             logradouro = "",
                             number = "",
