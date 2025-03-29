@@ -39,6 +39,7 @@ import br.com.alura.ondefica.ui.transformations.CepVisualTransformation
 import com.example.introductiontoroom.introduction.data.model.PersonEntity
 import com.example.ui_compose.theme.IntroductionToRoomTheme
 import com.example.ui_compose.transformations.CPFVisualTransformation
+import com.example.ui_compose.transformations.PhoneVisualTransformation
 import com.example.ui_compose.transformations.RGVisualTransformation
 
 
@@ -285,20 +286,25 @@ fun AddressForm(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
+            // Estado para armazenar o número de celular digitado pelo usuário
+            var phoneNumber by remember { mutableStateOf("") }
 
-            var phone by remember(uiState.phone) {
-                mutableStateOf(uiState.phone)
-            }
             TextField(
-                value = phone,
-                onValueChange = {
-                    phone = it
+                value = phoneNumber,
+                onValueChange = { newValue ->
+                    // Filtra apenas números e limita o tamanho a 11 dígitos
+                    val onlyDigits = newValue.filter { it.isDigit() }
+                    if (onlyDigits.length <= 11) {
+                        phoneNumber = onlyDigits
+                    }
                 },
-                addressTextFieldModifier,
-                label = {
-                    Text(text = "Celular")
-                }
+                label = { Text("Número de Celular") }, // Rótulo do campo
+                visualTransformation = PhoneVisualTransformation, // Aplica a formatação corretamente
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone), // Define o teclado numérico
+                modifier = Modifier.fillMaxWidth() // Expande o campo
             )
+
+
             var email by remember(uiState.email) {
                 mutableStateOf(uiState.email)
             }
@@ -316,16 +322,47 @@ fun AddressForm(
             val context = LocalContext.current
             Button(
                 onClick = {
-                    if (cep.isNotBlank() && uiState.logradouro.isNotBlank() && uiState.number.isNotBlank()
-                        && uiState.bairro.isNotBlank() && uiState.cidade.isNotBlank() && uiState.estado.isNotBlank()
-
+                    if (
+                        name.isNotBlank() &&
+                        dateBirth.isNotBlank() &&
+                        nsus.isNotBlank() &&
+                        cep.isNotBlank() &&
+                        logradouro.isNotBlank() &&
+                        numero.isNotBlank() &&
+                        bairro.isNotBlank() &&
+                        cidade.isNotBlank() &&
+                        estado.isNotBlank() &&
+                        sexo.isNotBlank() &&
+                        maritalstatus.isNotBlank() &&
+                        nationality.isNotBlank() &&
+                        identityRG.isNotBlank() &&
+                        identityCPF.isNotBlank() &&
+                        phoneNumber.isNotBlank() &&
+                        email?.isNotBlank() == true
                     ) {
-                        // Não é necessário criar a variável `personEntity` separada
+                        // Criando um novo objeto uiState atualizado com todos os campos preenchidos
                         onSaveAddressClick(
-                            uiState.copy(cep = cep)
-                        ) // Enviando diretamente os dados para salvar
+                            uiState.copy(
+                                name = name,
+                                dateBirth = dateBirth,
+                                nsus = nsus,
+                                cep = cep,
+                                logradouro = logradouro,
+                                number = numero,
+                                bairro = bairro,
+                                cidade = cidade,
+                                estado = estado,
+                                sexo = sexo,
+                                maritalStatus = maritalstatus,
+                                nationality = nationality,
+                                identityRG = identityRG,
+                                identityCPF = identityCPF,
+                                phone = phoneNumber,
+                                email = email
+                            )
+                        )
                     } else {
-                        // Exibe uma mensagem de erro caso algum campo necessário esteja vazio
+                        // Exibe uma mensagem de erro caso algum campo esteja vazio
                         Toast.makeText(
                             context,
                             "Preencha todos os campos obrigatórios!",
@@ -339,6 +376,7 @@ fun AddressForm(
             ) {
                 Text("Salvar Cadastro")
             }
+
         }
     }
 }

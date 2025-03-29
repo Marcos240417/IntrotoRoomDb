@@ -25,7 +25,7 @@ class AddressViewModel(
     val uiState: StateFlow<AddressUiState> get() = _uiState
 
     // Busca todos os endereços do Room
-    fun getAllAddresses() {
+    private fun getAllAddresses() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, isError = false)
             try {
@@ -46,7 +46,7 @@ class AddressViewModel(
     }
 
     // Busca um endereço do Room com base na chave primária (pId)
-    fun getAddressById(id: Int) {
+    private fun getAddressById(id: Int) {
         viewModelScope.launch {
             try {
                 val addressList = _uiState.value.addressList
@@ -59,7 +59,7 @@ class AddressViewModel(
     }
 
     // Insere ou atualiza um endereço no Room
-    fun saveAddress(personEntity: PersonEntity) {
+    private fun saveAddress(personEntity: PersonEntity) {
         viewModelScope.launch {
             try {
                 repository.insertAddress(personEntity)
@@ -72,7 +72,7 @@ class AddressViewModel(
     }
 
     // Deleta um endereço do Room com base na chave primária
-    fun deleteAddress(id: Int) {
+    private fun deleteAddress(id: Int) {
         viewModelScope.launch {
             try {
                 repository.deleteAddressById(id)

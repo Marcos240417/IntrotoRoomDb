@@ -38,9 +38,9 @@ class MainActivityCep : ComponentActivity() {
                 ) {
                     // Obter instância do ViewModel com Koin
                     val addressViewModel = koinViewModel<AddressViewModel>()
-                    val uiState = addressViewModel.uiState.collectAsState().value // Observa o estado
+                    val uiState =
+                        addressViewModel.uiState.collectAsState().value // Observa o estado
                     val coroutineScope = rememberCoroutineScope()
-
 
 
                     // Formulário de endereço
