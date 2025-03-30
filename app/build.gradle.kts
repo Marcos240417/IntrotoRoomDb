@@ -70,7 +70,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     ksp(libs.androidx.room.compiler)
 
-    implementation(libs.io.insert.koin)
 
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
