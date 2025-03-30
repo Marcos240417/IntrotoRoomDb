@@ -25,7 +25,7 @@ interface PersonDao {
     suspend fun deletePersonById(pId: Int)
 
     @Query("SELECT * FROM person_table")
-    fun getAllDatta(): Flow<List<PersonEntity>>
+    fun getAllData(): Flow<List<PersonEntity>>
 
     //Procura por ambos inicio e fim da String.
     @Query("SELECT * FROM person_table WHERE person_name LIKE '%' || :query || '%' or person_date_birth LIKE '%' || :query || '%' or person_nsus LIKE '%' || :query || '%'")
