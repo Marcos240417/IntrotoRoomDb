@@ -7,7 +7,7 @@ interface PersonRepository {
     suspend fun insertPerson(personEntity: PersonEntity)
     suspend fun deletePerson(personEntity: PersonEntity)
     suspend fun updatePerson(personEntity: PersonEntity)
-    suspend fun deletePersonById(personEntity: PersonEntity)
+    suspend fun deletePersonById(pId: Int)
     fun getAllPerson(): Flow<List<PersonEntity>>
     fun getSearchedData(query: String): Flow<List<PersonEntity>>
 

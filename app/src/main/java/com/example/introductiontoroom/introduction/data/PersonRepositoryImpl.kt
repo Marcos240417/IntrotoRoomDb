@@ -1,5 +1,6 @@
 package com.example.introductiontoroom.introduction.data
 
+import android.util.Log
 import com.example.introductiontoroom.introduction.data.model.PersonEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -10,27 +11,59 @@ class PersonRepositoryImpl(
 {
 
     override suspend fun insertPerson(personEntity: PersonEntity) {
-        personDao.insertPerson(personEntity)
+      try {
+          personDao.insertPerson(personEntity)
+      }
+      catch (e: Exception) {
+          Log.e("PersonRepositoryImpl", "Erro ao inserir pessoa", e)
+      }
     }
 
     override suspend fun deletePerson(personEntity: PersonEntity) {
-        personDao.deletePerson(personEntity)
+       try {
+           personDao.deletePerson(personEntity)
+       }
+       catch (e: Exception) {
+           Log.e("PersonRepositoryImpl", "Erro ao deletar pessoa", e)
+       }
     }
 
     override suspend fun updatePerson(personEntity: PersonEntity) {
-        personDao.updatePerson(personEntity)
+        try {
+            personDao.updatePerson(personEntity)
+        }
+        catch (e: Exception) {
+            Log.e("PersonRepositoryImpl", "Erro ao atualizar pessoa", e)
+        }
     }
 
-    override suspend fun deletePersonById(personEntity: PersonEntity) {
-        personDao.deletePersonById(personEntity.pId) // Corrigido aqui
+    override suspend fun deletePersonById(pId: Int) {
+        try {
+            personDao.deletePersonById(pId) // Corrigido aqui
+        }
+        catch (e: Exception) {
+            Log.e("PersonRepositoryImpl", "Erro ao deletar pessoa por ID", e)
+        }
     }
 
     override fun getAllPerson(): Flow<List<PersonEntity>> {
-        return personDao.getAllDatta()
+        try {
+            return personDao.getAllData()
+        }
+        catch (e: Exception) {
+            Log.e("PersonRepositoryImpl", "Erro ao obter todas as pessoas", e)
+            throw e
+        }
     }
 
     override fun getSearchedData(query: String): Flow<List<PersonEntity>> {
-        return personDao.getSearchedData(query)
+        try {
+            return personDao.getSearchedData(query)
+        }
+        catch (e: Exception) {
+            Log.e("PersonRepositoryImpl", "Erro ao buscar pessoas", e)
+            throw e
+        }
     }
 
     // Métodos da API (não implementados)

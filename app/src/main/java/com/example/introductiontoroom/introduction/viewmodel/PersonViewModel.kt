@@ -9,6 +9,7 @@ import com.example.introductiontoroom.introduction.data.model.PersonEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.util.Log
 
 class PersonViewModel(
     private val personRepository: PersonRepository,
@@ -19,47 +20,59 @@ class PersonViewModel(
     val searchedPersons: LiveData<List<PersonEntity>> get() = _searchedPersons
 
     init {
-        // Inicializa com a lista de pessoas do banco local
         getAllPersons()
     }
 
-    // Obtém todas as pessoas do banco local (Room)
     private fun getAllPersons() {
         viewModelScope.launch(dispatcher) {
-            personRepository.getAllPerson().collect { personList ->
-                _searchedPersons.postValue(personList)
+            try {
+                personRepository.getAllPerson().collect { personList ->
+                    _searchedPersons.postValue(personList)
+                }
+            } catch (e: Exception) {
+                Log.e("PersonViewModel", "Erro ao obter todas as pessoas", e)
             }
         }
     }
 
     fun addPerson(personEntity: PersonEntity) {
         viewModelScope.launch(dispatcher) {
-            personRepository.insertPerson(personEntity)
+            try {
+                personRepository.insertPerson(personEntity)
+            } catch (e: Exception) {
+                Log.e("PersonViewModel", "Erro ao adicionar pessoa", e)
+            }
         }
     }
 
     fun deletePerson(personEntity: PersonEntity) {
         viewModelScope.launch(dispatcher) {
-            personRepository.deletePerson(personEntity)
+            try {
+                personRepository.deletePerson(personEntity)
+            } catch (e: Exception) {
+                Log.e("PersonViewModel", "Erro ao deletar pessoa", e)
+            }
         }
     }
 
     fun updatePerson(personEntity: PersonEntity) {
         viewModelScope.launch(dispatcher) {
-            personRepository.updatePerson(personEntity)
+            try {
+                personRepository.updatePerson(personEntity)
+            } catch (e: Exception) {
+                Log.e("PersonViewModel", "Erro ao atualizar pessoa", e)
+            }
         }
     }
 
-    /*fun deletePersonById(personEntity: PersonEntity) {
-        viewModelScope.launch(dispatcher) {
-            personRepository.deletePersonById(personEntity)
-        }
-    }*/
-
     fun getSearchedData(query: String = "") {
         viewModelScope.launch(dispatcher) {
-            personRepository.getSearchedData(query).collect { personList ->
-                _searchedPersons.postValue(personList)
+            try {
+                personRepository.getSearchedData(query).collect { personList ->
+                    _searchedPersons.postValue(personList)
+                }
+            } catch (e: Exception) {
+                Log.e("PersonViewModel", "Erro ao buscar pessoas", e)
             }
         }
     }
