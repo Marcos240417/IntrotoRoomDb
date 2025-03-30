@@ -62,3 +62,5 @@ class PersonDetailsAdapter(private val listener: PersonDetailsClickListener) :
         override fun areContentsTheSame(oldItem: PersonEntity, newItem: PersonEntity) = oldItem == newItem
     }
 }
+
+
