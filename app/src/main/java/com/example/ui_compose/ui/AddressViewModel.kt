@@ -4,90 +4,79 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.introductiontoroom.introduction.data.model.PersonEntity
 import com.example.ui_compose.dataaddres.AddressRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-// Modelo para o estado único
-data class AddressUiState(
-    val selectedAddress: PersonEntity? = null, // Endereço selecionado (atual)
-    val addressList: List<PersonEntity> = emptyList(), // Lista de endereços
-    val isLoading: Boolean = false, // Indicador de carregamento
-    val isError: Boolean = false // Indicador de erro
-)
-
 class AddressViewModel(
-    private val repository: AddressRepository // Repositório para manipular Room e API
+    private val repository: AddressRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    // Estado único para gerenciar tudo
-    private val _uiState = MutableStateFlow(AddressUiState())
-    val uiState: StateFlow<AddressUiState> get() = _uiState
+    // Lista de endereços
+    private val _searchedPersons = MutableStateFlow<List<PersonEntity>>(emptyList())
+    val searchedPersons: StateFlow<List<PersonEntity>> get() = _searchedPersons
 
-    // Busca todos os endereços do Room
+    // Estado de carregamento
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> get() = _isLoading
+
+    // Estado de erro
+    private val _isError = MutableStateFlow(false)
+    val isError: StateFlow<Boolean> get() = _isError
+
+    init {
+        getAllAddresses()
+    }
+
+    // Obtém todos os endereços do Room
     private fun getAllAddresses() {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, isError = false)
+        viewModelScope.launch(dispatcher) {
+            _isLoading.value = true
+            _isError.value = false
             try {
                 repository.getAllAddresses().collect { addresses ->
-                    _uiState.value = _uiState.value.copy(
-                        addressList = addresses,
-                        isLoading = false
-                    )
+                    _searchedPersons.value = addresses // Atualiza a lista de endereços
+                    _isLoading.value = false
                 }
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    addressList = emptyList(),
-                    isLoading = false,
-                    isError = true
-                )
+                _isError.value = true
+                _isLoading.value = false
             }
         }
     }
 
-    // Busca um endereço do Room com base na chave primária (pId)
-    private fun getAddressById(id: Int) {
-        viewModelScope.launch {
-            try {
-                val addressList = _uiState.value.addressList
-                val person = addressList.firstOrNull { it.pId == id }
-                _uiState.value = _uiState.value.copy(selectedAddress = person)
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(selectedAddress = null)
-            }
-        }
-    }
-
-    // Insere ou atualiza um endereço no Room
-    private fun saveAddress(personEntity: PersonEntity) {
-        viewModelScope.launch {
+    // Insere ou atualiza um endereço no banco
+    fun saveAddress(personEntity: PersonEntity) {
+        viewModelScope.launch(dispatcher) {
             try {
                 repository.insertAddress(personEntity)
-                _uiState.value = _uiState.value.copy(selectedAddress = personEntity)
-                getAllAddresses() // Atualiza a lista
+                getAllAddresses() // Atualiza a lista após inserção ou atualização
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isError = true)
+                _isError.value = true
             }
         }
     }
 
-    // Deleta um endereço do Room com base na chave primária
-    private fun deleteAddress(id: Int) {
-        viewModelScope.launch {
+    // Deleta um endereço pelo ID
+    fun deleteAddress(id: Int) {
+        viewModelScope.launch(dispatcher) {
             try {
                 repository.deleteAddressById(id)
-                _uiState.value = _uiState.value.copy(selectedAddress = null)
-                getAllAddresses() // Atualiza a lista de endereços
+                getAllAddresses() // Atualiza a lista após a exclusão
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isError = true)
+                _isError.value = true
             }
         }
     }
 
-    // Busca um único endereço pela API e exibe antes de salvar no banco
+    // Busca um endereço da API pelo CEP
     fun fetchAddressFromApi(cep: String) {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, isError = false)
+        viewModelScope.launch(dispatcher) {
+            _isLoading.value = true
+            _isError.value = false
             try {
                 val response = repository.fetchAddressFromApi(cep)
                 response?.let {
@@ -110,23 +99,16 @@ class AddressViewModel(
                         phone = "",
                         email = null
                     )
-                    _uiState.value = _uiState.value.copy(
-                        selectedAddress = apiAddress,
-                        isLoading = false
-                    )
+                    _searchedPersons.value = listOf(apiAddress) // Atualiza a lista com o endereço da API
+                    _isLoading.value = false
                 } ?: run {
-                    _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
+                    _isError.value = true
+                    _isLoading.value = false
                 }
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
+                _isError.value = true
+                _isLoading.value = false
             }
-        }
-    }
-
-    // Confirma o salvamento do endereço atualmente selecionado
-    fun confirmSaveAddress() {
-        _uiState.value.selectedAddress?.let {
-            saveAddress(it)
         }
     }
 }

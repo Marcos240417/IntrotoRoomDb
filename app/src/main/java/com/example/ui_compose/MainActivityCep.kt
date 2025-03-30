@@ -16,6 +16,8 @@ import com.example.ui_compose.ui.AddressViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
+
+
 class MainActivityCep : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,39 +40,42 @@ class MainActivityCep : ComponentActivity() {
                 ) {
                     // Obter instância do ViewModel com Koin
                     val addressViewModel = koinViewModel<AddressViewModel>()
-                    val uiState =
-                        addressViewModel.uiState.collectAsState().value // Observa o estado
+                    val uiState = addressViewModel.searchedPersons.collectAsState().value // Observa o estado
                     val coroutineScope = rememberCoroutineScope()
 
+                    // Usar a PersonEntity obtida ou um valor default se não houver dados
+                    //uiState.firstOrNull(), que pega o primeiro endereço da lista searchedPersons,
+                    // se existir. Caso contrário, ele usa os dados passados pelo Intent como valores padrão.
+                    val selectedAddress = uiState.firstOrNull() ?: PersonEntity(
+                        pId = personId,
+                        name = personName ?: "",
+                        dateBirth = personDateBirth ?: "",
+                        nsus = personNsus ?: "",
+                        cep = "",
+                        logradouro = "",
+                        number = "",
+                        bairro = "",
+                        cidade = "",
+                        estado = "",
+                        sexo = "",
+                        maritalStatus = "",
+                        nationality = "",
+                        identityRG = "",
+                        identityCPF = "",
+                        phone = "",
+                        email = ""
+                    )
 
                     // Formulário de endereço
                     AddressForm(
-                        uiState = uiState.selectedAddress ?: PersonEntity(
-                            pId = personId,
-                            name = personName ?: "",
-                            dateBirth = personDateBirth ?: "",
-                            nsus = personNsus ?: "",
-                            cep = "",
-                            logradouro = "",
-                            number = "",
-                            bairro = "",
-                            cidade = "",
-                            estado = "",
-                            sexo = "",
-                            maritalStatus = "",
-                            nationality = "",
-                            identityRG = "",
-                            identityCPF = "",
-                            phone = "",
-                            email = ""
-                        ), // Passa o estado completo que inclui os dados da API
+                        uiState = selectedAddress, // Passa a PersonEntity com dados
                         onSearchAddressClick = { cep ->
                             addressViewModel.fetchAddressFromApi(cep)
                         },
                         onSaveAddressClick = { // Função para salvar no banco de dados
                             coroutineScope.launch {
                                 // Chama a função do ViewModel para salvar ou atualizar no banco
-                                addressViewModel.confirmSaveAddress()
+                                addressViewModel.saveAddress(selectedAddress)
                             }
                         }
                     )
