@@ -44,15 +44,15 @@ import com.example.ui_compose.transformations.RGVisualTransformation
 
 
 @Composable
-fun AddressForm(
+fun AddressFormScreen(
 
     uiState: PersonEntity,
     onSaveAddressClick: (PersonEntity) -> Unit, // Definindo que a função aceita um PersonEntity
-    onSearchAddressClick: (String) -> Unit,
+    onSearchAddressClick: (String, PersonEntity) -> Unit,
     modifier: Modifier = Modifier,
 
 
-) {
+    ) {
 
 
     Column(modifier.fillMaxSize()) {
@@ -140,7 +140,7 @@ fun AddressForm(
                     },
                     visualTransformation = CepVisualTransformation
                 )
-                IconButton(onClick = { onSearchAddressClick(cep) }) {
+                IconButton(onClick = { onSearchAddressClick(cep, uiState) }) {
                     Icon(
                         Icons.Default.Search,
                         "lupa indicando ação de busca",
@@ -309,7 +309,7 @@ fun AddressForm(
                 mutableStateOf(uiState.email)
             }
             TextField(
-                value = email?: "",
+                value = email ?: "",
                 onValueChange = {
                     email = it
                 },
@@ -320,6 +320,7 @@ fun AddressForm(
 
             // Botão para salvar os dados
             val context = LocalContext.current
+
             Button(
                 onClick = {
                     if (
@@ -340,29 +341,32 @@ fun AddressForm(
                         phoneNumber.isNotBlank() &&
                         email?.isNotBlank() == true
                     ) {
-                        // Criando um novo objeto uiState atualizado com todos os campos preenchidos
-                        onSaveAddressClick(
-                            uiState.copy(
-                                name = name,
-                                dateBirth = dateBirth,
-                                nsus = nsus,
-                                cep = cep,
-                                logradouro = logradouro,
-                                number = numero,
-                                bairro = bairro,
-                                cidade = cidade,
-                                estado = estado,
-                                sexo = sexo,
-                                maritalStatus = maritalstatus,
-                                nationality = nationality,
-                                identityRG = identityRG,
-                                identityCPF = identityCPF,
-                                phone = phoneNumber,
-                                email = email
-                            )
+                        val updatedPerson = uiState.copy(
+                            pId = uiState.pId,
+                            name = name,
+                            dateBirth = dateBirth,
+                            nsus = nsus,
+                            cep = cep,
+                            logradouro = logradouro,
+                            number = numero,
+                            bairro = bairro,
+                            cidade = cidade,
+                            estado = estado,
+                            sexo = sexo,
+                            maritalStatus = maritalstatus,
+                            nationality = nationality,
+                            identityRG = identityRG,
+                            identityCPF = identityCPF,
+                            phone = phoneNumber,
+                            email = email
                         )
+
+                        onSaveAddressClick(updatedPerson) // Salva no Room
+
+                        Toast.makeText(context, "Cadastro salvo com sucesso!", Toast.LENGTH_SHORT)
+                            .show()
+
                     } else {
-                        // Exibe uma mensagem de erro caso algum campo esteja vazio
                         Toast.makeText(
                             context,
                             "Preencha todos os campos obrigatórios!",
@@ -374,8 +378,9 @@ fun AddressForm(
                     .fillMaxWidth()
                     .padding(top = 16.dp)
             ) {
-                Text("Salvar Cadastro")
+                Text("Salvar e Ver Lista")
             }
+
 
         }
     }
@@ -386,7 +391,7 @@ fun AddressForm(
 fun AddressFormPreview() {
     IntroductionToRoomTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            AddressForm(
+            AddressFormScreen(
                 uiState = PersonEntity(
                     pId = 1,
                     name = "",
@@ -407,11 +412,11 @@ fun AddressFormPreview() {
                     email = ""
                 ),
 
-                onSearchAddressClick = {},
+                onSearchAddressClick = { _,_ ->},
                 onSaveAddressClick = {},
                 modifier = Modifier,
 
-            )
+                )
         }
     }
 }

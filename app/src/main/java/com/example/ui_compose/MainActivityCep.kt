@@ -9,27 +9,25 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.example.introductiontoroom.introduction.data.model.PersonEntity
-import com.example.ui_compose.layout.AddressForm
+import com.example.ui_compose.layout.AddressFormScreen
 import com.example.ui_compose.theme.IntroductionToRoomTheme
 import com.example.ui_compose.ui.AddressViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-
-
 
 class MainActivityCep : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Recuperar dados do Intent
-        val personId = intent.getIntExtra("person_id", 0) // Exemplo: ID da pessoa
-        val personName = intent.getStringExtra("person_name") // Nome enviado
-        val personDateBirth = intent.getStringExtra("person_date_birth") // Data de nascimento
-        val personNsus = intent.getStringExtra("person_nsus") // Número do SUS
+        val personId = intent.getIntExtra("person_id", -1)
+        val personName = intent.getStringExtra("person_name").orEmpty()
+        val personDateBirth = intent.getStringExtra("person_date_birth").orEmpty()
+        val personNsus = intent.getStringExtra("person_nsus").orEmpty()
 
-        // Use os dados conforme necessário
-        // Exemplo: Logar os dados no console
+        // Exibir logs para depuração
         println("ID: $personId, Nome: $personName, Data Nascimento: $personDateBirth, SUS: $personNsus")
 
         setContent {
@@ -38,19 +36,19 @@ class MainActivityCep : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Obter instância do ViewModel com Koin
+                    // Obter instância do ViewModel via Koin
+                    val navController = rememberNavController()
                     val addressViewModel = koinViewModel<AddressViewModel>()
-                    val uiState = addressViewModel.searchedPersons.collectAsState().value // Observa o estado
+                    val uiState =
+                        addressViewModel.searchedPersons.collectAsState(initial = emptyList()).value
                     val coroutineScope = rememberCoroutineScope()
 
-                    // Usar a PersonEntity obtida ou um valor default se não houver dados
-                    //uiState.firstOrNull(), que pega o primeiro endereço da lista searchedPersons,
-                    // se existir. Caso contrário, ele usa os dados passados pelo Intent como valores padrão.
+                    // Verifica se há dados carregados, senão usa os valores da Intent
                     val selectedAddress = uiState.firstOrNull() ?: PersonEntity(
                         pId = personId,
-                        name = personName ?: "",
-                        dateBirth = personDateBirth ?: "",
-                        nsus = personNsus ?: "",
+                        name = personName,
+                        dateBirth = personDateBirth,
+                        nsus = personNsus,
                         cep = "",
                         logradouro = "",
                         number = "",
@@ -66,16 +64,17 @@ class MainActivityCep : ComponentActivity() {
                         email = ""
                     )
 
-                    // Formulário de endereço
-                    AddressForm(
-                        uiState = selectedAddress, // Passa a PersonEntity com dados
-                        onSearchAddressClick = { cep ->
-                            addressViewModel.fetchAddressFromApi(cep)
+                    // Tela de Formulário de Endereço (Entrada de Dados)
+                    AddressFormScreen(
+                        uiState = selectedAddress,
+
+                        onSearchAddressClick = { cep, personEntity ->
+                            addressViewModel.fetchAddressFromApi(cep, personEntity)
                         },
-                        onSaveAddressClick = { // Função para salvar no banco de dados
+                        onSaveAddressClick = { updatedPerson -> // Agora recebe os dados atualizados
                             coroutineScope.launch {
-                                // Chama a função do ViewModel para salvar ou atualizar no banco
-                                addressViewModel.saveAddress(selectedAddress)
+                                addressViewModel.saveAddress(updatedPerson) // Salva corretamente
+                                //navController.navigate("address_list_screen")
                             }
                         }
                     )
@@ -84,3 +83,4 @@ class MainActivityCep : ComponentActivity() {
         }
     }
 }
+

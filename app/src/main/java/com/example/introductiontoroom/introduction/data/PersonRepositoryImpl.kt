@@ -2,11 +2,14 @@ package com.example.introductiontoroom.introduction.data
 
 import android.util.Log
 import com.example.introductiontoroom.introduction.data.model.PersonEntity
+import com.example.ui_compose.dataaddres.model.AddressResponse
+import com.example.ui_compose.dataaddres.model.network.AddressService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class PersonRepositoryImpl(
     private val personDao: PersonDao,
-    //private val personApi: PersonApi // Banco de dados local
+    private val addressService: AddressService // Banco de dados local
 ) : PersonRepository
 {
 
@@ -66,17 +69,60 @@ class PersonRepositoryImpl(
         }
     }
 
-    // Métodos da API (não implementados)
-    override suspend fun fetchPeopleFromApi(): Flow<List<PersonEntity>> {
-        throw NotImplementedError("fetchPeopleFromApi não foi implementado")
+    /** Busca um endereço na API pelo CEP */
+    override suspend fun fetchAddressFromApi(cep: String): AddressResponse? {
+        return try {
+            addressService.findAddress(cep)
+        } catch (e: Exception) {
+            Log.e("PersonRepositoryImpl", "Erro ao buscar endereço na API", e)
+            null
+        }
     }
 
-    override suspend fun searchPeopleFromApi(query: String): Flow<List<PersonEntity>> {
-        throw NotImplementedError("searchPeopleFromApi não foi implementado")
+    /** Busca vários endereços na API */
+    override suspend fun fetchAddressesFromApi(): Flow<List<AddressResponse>> {
+        return flow {
+            try {
+                val response = listOf<AddressResponse>() // Simulação da resposta da API
+                emit(response)
+            } catch (e: Exception) {
+                Log.e("PersonRepositoryImpl", "Erro ao buscar endereços na API", e)
+                emit(emptyList())
+            }
+        }
     }
 
-    override suspend fun insertPeopleFromApi(insertPerson: String): Flow<Unit> {
-        throw NotImplementedError("insertPeopleFromApi não foi implementado")
+    /** Insere endereços retornados da API no banco de dados */
+    override suspend fun insertAddressesFromApi(addressList: List<AddressResponse>) {
+        val addressEntities = addressList.map { response ->
+            PersonEntity(
+                pId = 0,
+                name = "",
+                dateBirth = "",
+                nsus = "",
+                cep = response.cep,
+                logradouro = response.logradouro,
+                number = "",
+                bairro = response.bairro,
+                cidade = response.localidade,
+                estado = response.estado,
+                sexo = "",
+                maritalStatus = "",
+                nationality = "",
+                identityRG = "",
+                identityCPF = "",
+                phone = "",
+                email = ""
+            )
+        }
+
+        try {
+            addressEntities.forEach { entity ->
+                personDao.insertPerson(entity)
+            }
+        } catch (e: Exception) {
+            Log.e("PersonRepositoryImpl", "Erro ao inserir endereços da API no Room", e)
+        }
     }
 
 }

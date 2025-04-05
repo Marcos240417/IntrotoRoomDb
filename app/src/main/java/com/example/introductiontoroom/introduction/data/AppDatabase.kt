@@ -7,13 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.introductiontoroom.introduction.data.model.PersonEntity
-import com.example.ui_compose.dataaddres.model.AddressDao
 
 @Database(version = 5, entities = [PersonEntity::class], exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun personDao(): PersonDao
-    abstract fun addressDao(): AddressDao
 
     companion object {
         @Volatile

@@ -14,7 +14,6 @@ class App : Application() {
             modules(
                 appModule,       // Módulo do banco de dados e Person
                 networkModule,   // Módulo de Rede (Retrofit, OkHttp, AddressService)
-                cepNetworkModule // Módulo de Endereço (AddressRepository, AddressViewModel)
             )
         }
     }

@@ -29,6 +29,8 @@ uiTooling = "1.7.8"
 composeBom = "2025.03.01"
 firebaseCrashlyticsBuildtools = "3.0.3"
 baselibrary = "3.2.0-alpha11"
+navigationRuntimeAndroid = "2.9.0-alpha09"
+navigationCompose = "2.8.9"
 
 [libraries]
 adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
@@ -75,6 +77,8 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 androidx-baselibrary = { group = "androidx.databinding", name = "baseLibrary", version.ref = "baselibrary" }
+androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

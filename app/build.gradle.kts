@@ -59,6 +59,8 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.androidx.baselibrary)
+    implementation(libs.androidx.navigation.runtime.android)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
